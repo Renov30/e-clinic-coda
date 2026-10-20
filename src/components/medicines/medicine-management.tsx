@@ -1,5 +1,8 @@
 "use client";
 
+// ==========================================
+// 1. IMPORTS & DEPENDENCIES
+// ==========================================
 import React, { useState, useTransition, useMemo } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -29,6 +32,9 @@ import {
   getNextKodeBrngAction,
 } from "@/modules/medicines/actions";
 
+// ==========================================
+// 2. TYPES & INTERFACES
+// ==========================================
 interface MedicineManagementProps {
   initialMedicines: Medicine[];
   categories: CategoryOption[];
@@ -36,6 +42,9 @@ interface MedicineManagementProps {
   initialAdjustments: StockAdjustment[];
 }
 
+// ==========================================
+// 3. CONSTANTS & HELPER FUNCTIONS
+// ==========================================
 function formatCurrency(val: number): string {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
@@ -44,12 +53,18 @@ function formatCurrency(val: number): string {
   }).format(val);
 }
 
+// ==========================================
+// 4. MAIN COMPONENT (MedicineManagement)
+// ==========================================
 export function MedicineManagement({
   initialMedicines,
   categories,
   units,
   initialAdjustments,
 }: MedicineManagementProps) {
+  // ----------------------------------------
+  // 4.1 State & Hooks
+  // ----------------------------------------
   const [medicines, setMedicines] = useState<Medicine[]>(initialMedicines);
   const [unitList, setUnitList] = useState<SatuanOption[]>(units);
   const [adjustments, setAdjustments] = useState<StockAdjustment[]>(initialAdjustments);
@@ -67,7 +82,7 @@ export function MedicineManagement({
     message: string;
   } | null>(null);
 
-  // Loading state
+  // Loading transition
   const [isPending, startTransition] = useTransition();
 
   // Dialog State: Tambah Obat Baru
@@ -110,7 +125,9 @@ export function MedicineManagement({
     satuan: "",
   });
 
-  // Summary Metrics
+  // ----------------------------------------
+  // 4.2 Derived State & Calculations (Memos)
+  // ----------------------------------------
   const summary = useMemo(() => {
     const active = medicines.filter((m) => m.status === "1");
     const totalMedicines = active.length;
@@ -141,7 +158,6 @@ export function MedicineManagement({
   // Filtered medicines
   const filteredMedicines = useMemo(() => {
     return medicines.filter((med) => {
-      // Keyword match
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase().trim();
         const matchesName = med.namaBrng.toLowerCase().includes(query);
@@ -149,16 +165,13 @@ export function MedicineManagement({
         if (!matchesName && !matchesCode) return false;
       }
 
-      // Kategori match
       if (selectedCategory !== "all" && med.kategori !== selectedCategory) {
         return false;
       }
 
-      // Status Aktif match
       if (selectedStatus === "active" && med.status !== "1") return false;
       if (selectedStatus === "inactive" && med.status !== "0") return false;
 
-      // Stock status match
       if (selectedStockStatus === "out" && med.stok > 0) return false;
       if (selectedStockStatus === "low" && (med.stok <= 0 || med.stok > 20)) return false;
       if (selectedStockStatus === "safe" && med.stok <= 20) return false;
@@ -167,7 +180,25 @@ export function MedicineManagement({
     });
   }, [medicines, searchQuery, selectedCategory, selectedStockStatus, selectedStatus]);
 
-  // Handler: Buka modal Tambah Obat
+  // Kalkulasi preview stok sesudah penyesuaian
+  const calculatedNextStock = useMemo(() => {
+    if (!adjustingMedicine) return 0;
+    const current = adjustingMedicine.stok;
+    const qty = Math.abs(Number(adjustForm.jumlah) || 0);
+
+    if (adjustForm.jenis === "TAMBAH") {
+      return current + qty;
+    } else if (adjustForm.jenis === "KURANG") {
+      return Math.max(0, current - qty);
+    } else if (adjustForm.jenis === "OPNAME") {
+      return Math.max(0, Number(adjustForm.jumlah) || 0);
+    }
+    return current;
+  }, [adjustingMedicine, adjustForm.jenis, adjustForm.jumlah]);
+
+  // ----------------------------------------
+  // 4.3 Handlers & Actions
+  // ----------------------------------------
   const handleOpenCreateModal = async () => {
     const nextKode = await getNextKodeBrngAction();
     setCreateForm({
@@ -182,7 +213,6 @@ export function MedicineManagement({
     setIsCreateOpen(true);
   };
 
-  // Handler: Submit Tambah Obat
   const handleCreateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setNotification(null);
@@ -235,7 +265,6 @@ export function MedicineManagement({
     });
   };
 
-  // Handler: Buka modal Edit Obat
   const handleOpenEditModal = (med: Medicine) => {
     setEditingMedicine(med);
     setEditForm({
@@ -249,7 +278,6 @@ export function MedicineManagement({
     setIsEditOpen(true);
   };
 
-  // Handler: Submit Edit Obat
   const handleEditSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingMedicine) return;
@@ -303,7 +331,6 @@ export function MedicineManagement({
     });
   };
 
-  // Handler: Toggle Status Aktif/Nonaktif
   const handleToggleStatus = (med: Medicine) => {
     setNotification(null);
     const nextStatus: "0" | "1" = med.status === "1" ? "0" : "1";
@@ -332,7 +359,6 @@ export function MedicineManagement({
     });
   };
 
-  // Handler: Buka modal Sesuaikan Stok
   const handleOpenAdjustModal = (med: Medicine) => {
     setAdjustingMedicine(med);
     setAdjustForm({
@@ -343,23 +369,6 @@ export function MedicineManagement({
     setIsAdjustOpen(true);
   };
 
-  // Kalkulasi preview stok sesudah penyesuaian
-  const calculatedNextStock = useMemo(() => {
-    if (!adjustingMedicine) return 0;
-    const current = adjustingMedicine.stok;
-    const qty = Math.abs(Number(adjustForm.jumlah) || 0);
-
-    if (adjustForm.jenis === "TAMBAH") {
-      return current + qty;
-    } else if (adjustForm.jenis === "KURANG") {
-      return Math.max(0, current - qty);
-    } else if (adjustForm.jenis === "OPNAME") {
-      return Math.max(0, Number(adjustForm.jumlah) || 0);
-    }
-    return current;
-  }, [adjustingMedicine, adjustForm.jenis, adjustForm.jumlah]);
-
-  // Handler: Submit Sesuaikan Stok
   const handleAdjustSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!adjustingMedicine) return;
@@ -385,7 +394,6 @@ export function MedicineManagement({
       if (res.success && typeof res.newStock === "number") {
         const updatedStock = res.newStock;
 
-        // Update local medicine list
         setMedicines((prev) =>
           prev.map((m) =>
             m.kodeBrng === adjustingMedicine.kodeBrng
@@ -394,7 +402,6 @@ export function MedicineManagement({
           )
         );
 
-        // Tambahkan ke riwayat lokal
         const newHist: StockAdjustment = {
           id: Date.now(),
           kodeBrng: adjustingMedicine.kodeBrng,
@@ -423,7 +430,6 @@ export function MedicineManagement({
     });
   };
 
-  // Handler: Submit Satuan Baru
   const handleCreateUnitSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const cleanKode = newUnitForm.kodeSat.trim().toUpperCase().slice(0, 4);
@@ -451,17 +457,35 @@ export function MedicineManagement({
     });
   };
 
+  // ----------------------------------------
+  // 4.4 Render UI
+  // ----------------------------------------
   return (
     <div className="space-y-6">
-      {/* Page Title & Navigation Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-4">
-        <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">
-            Manajemen Data & Stok Obat
-          </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Kelola katalog obat, harga modal, harga jual, dan stok depo farmasi klinik.
-          </p>
+      {/* 4.4.1 Top Bar & Navigation Actions (No redundant title inside page) */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-3">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => setActiveTab("catalog")}
+            className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+              activeTab === "catalog"
+                ? "bg-blue-600 text-white shadow-xs"
+                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            }`}
+          >
+            Katalog & Stok Obat ({filteredMedicines.length})
+          </button>
+
+          <button
+            onClick={() => setActiveTab("history")}
+            className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+              activeTab === "history"
+                ? "bg-blue-600 text-white shadow-xs"
+                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            }`}
+          >
+            Riwayat Penyesuaian Stok ({adjustments.length})
+          </button>
         </div>
 
         <div className="flex items-center space-x-2.5">
@@ -484,7 +508,7 @@ export function MedicineManagement({
         </div>
       </div>
 
-      {/* Top Banner / Notification */}
+      {/* 4.4.2 Banner Notifications */}
       {notification && (
         <div
           className={`flex items-center justify-between p-3.5 rounded-xl border text-sm transition-all ${
@@ -503,7 +527,7 @@ export function MedicineManagement({
         </div>
       )}
 
-      {/* KPI Overview Cards */}
+      {/* 4.4.3 Summary KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5">
         <Card className="rounded-2xl border-slate-200/80 shadow-xs p-4">
           <span className="text-xs font-medium text-slate-500 block">Total Jenis Obat</span>
@@ -540,32 +564,7 @@ export function MedicineManagement({
         </Card>
       </div>
 
-      {/* Tab Switcher */}
-      <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
-        <button
-          onClick={() => setActiveTab("catalog")}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
-            activeTab === "catalog"
-              ? "bg-blue-600 text-white shadow-xs"
-              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-          }`}
-        >
-          Katalog & Stok Obat ({filteredMedicines.length})
-        </button>
-
-        <button
-          onClick={() => setActiveTab("history")}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
-            activeTab === "history"
-              ? "bg-blue-600 text-white shadow-xs"
-              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-          }`}
-        >
-          Riwayat Penyesuaian Stok ({adjustments.length})
-        </button>
-      </div>
-
-      {/* VIEW 1: KATALOG & STOK OBAT */}
+      {/* 4.4.4 Tab View 1: Katalog & Stok Obat */}
       {activeTab === "catalog" && (
         <div className="space-y-4">
           {/* Filters & Search Toolbar */}
@@ -580,7 +579,6 @@ export function MedicineManagement({
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              {/* Kategori combobox */}
               <div className="relative">
                 <select
                   value={selectedCategory}
@@ -599,7 +597,6 @@ export function MedicineManagement({
                 </span>
               </div>
 
-              {/* Status Stok combobox */}
               <div className="relative">
                 <select
                   value={selectedStockStatus}
@@ -618,7 +615,6 @@ export function MedicineManagement({
                 </span>
               </div>
 
-              {/* Status Aktif combobox */}
               <div className="relative">
                 <select
                   value={selectedStatus}
@@ -776,7 +772,7 @@ export function MedicineManagement({
         </div>
       )}
 
-      {/* VIEW 2: RIWAYAT PENYESUAIAN STOK */}
+      {/* 4.4.5 Tab View 2: Riwayat Penyesuaian Stok */}
       {activeTab === "history" && (
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
           <div className="p-4 border-b border-slate-100">
@@ -861,7 +857,7 @@ export function MedicineManagement({
         </div>
       )}
 
-      {/* DIALOG: TAMBAH OBAT BARU */}
+      {/* 4.4.6 Dialog: Tambah Obat Baru */}
       <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
         <DialogContent className="sm:max-w-lg">
           <form onSubmit={handleCreateSubmit}>
@@ -1034,7 +1030,7 @@ export function MedicineManagement({
         </DialogContent>
       </Dialog>
 
-      {/* DIALOG: EDIT DATA OBAT */}
+      {/* 4.4.7 Dialog: Edit Data Obat */}
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
         <DialogContent className="sm:max-w-lg">
           <form onSubmit={handleEditSubmit}>
@@ -1178,7 +1174,7 @@ export function MedicineManagement({
         </DialogContent>
       </Dialog>
 
-      {/* DIALOG: SESUAIKAN STOK (STOCK ADJUSTMENT / OPNAME) */}
+      {/* 4.4.8 Dialog: Sesuaikan Stok (Stock Adjustment / Opname) */}
       <Dialog open={isAdjustOpen} onOpenChange={setIsAdjustOpen}>
         <DialogContent className="sm:max-w-md">
           <form onSubmit={handleAdjustSubmit}>
@@ -1193,7 +1189,6 @@ export function MedicineManagement({
 
             {adjustingMedicine && (
               <div className="space-y-4 py-3 text-xs">
-                {/* Informasi Obat */}
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-slate-800">
@@ -1211,7 +1206,6 @@ export function MedicineManagement({
                   </div>
                 </div>
 
-                {/* Jenis Penyesuaian */}
                 <div>
                   <label className="font-semibold text-slate-700 block mb-1.5">
                     Jenis Penyesuaian <span className="text-rose-500">*</span>
@@ -1264,7 +1258,6 @@ export function MedicineManagement({
                   </div>
                 </div>
 
-                {/* Input Jumlah */}
                 <div>
                   <label className="font-semibold text-slate-700 block mb-1">
                     {adjustForm.jenis === "TAMBAH" && "Jumlah Stok yang Ditambahkan"}
@@ -1290,7 +1283,6 @@ export function MedicineManagement({
                   </div>
                 </div>
 
-                {/* Preview Perubahan Stok */}
                 <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200/80 flex items-center justify-between text-xs">
                   <span className="text-slate-600 font-medium">Stok Setelah Penyesuaian:</span>
                   <div className="flex items-center space-x-2">
@@ -1303,7 +1295,6 @@ export function MedicineManagement({
                   </div>
                 </div>
 
-                {/* Keterangan */}
                 <div>
                   <label className="font-semibold text-slate-700 block mb-1">
                     Catatan / Alasan Penyesuaian <span className="text-rose-500">*</span>
@@ -1350,7 +1341,7 @@ export function MedicineManagement({
         </DialogContent>
       </Dialog>
 
-      {/* DIALOG: TAMBAH SATUAN BARU */}
+      {/* 4.4.9 Dialog: Tambah Satuan Baru */}
       <Dialog open={isUnitModalOpen} onOpenChange={setIsUnitModalOpen}>
         <DialogContent className="sm:max-w-sm">
           <form onSubmit={handleCreateUnitSubmit}>

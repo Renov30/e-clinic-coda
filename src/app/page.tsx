@@ -1,3 +1,6 @@
+// ==========================================
+// 1. IMPORTS & DEPENDENCIES
+// ==========================================
 import React from "react";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -21,6 +24,9 @@ import {
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 
+// ==========================================
+// 2. CONFIGURATION & METADATA
+// ==========================================
 export const dynamic = "force-dynamic";
 
 export const metadata = {
@@ -28,6 +34,9 @@ export const metadata = {
   description: "Sistem Informasi Manajemen Klinik Terpadu e-clinic-coda",
 };
 
+// ==========================================
+// 3. MAIN COMPONENT (DashboardPage)
+// ==========================================
 export default async function DashboardPage() {
   const [clinicConfig, dbHealth, patients, visitsToday, recentSales] = await Promise.all([
     clinicConfigService.getClinicProfile(),
@@ -40,7 +49,7 @@ export default async function DashboardPage() {
   const totalOmsetObat = recentSales.reduce((acc, s) => acc + s.totalBiaya, 0);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Top welcome banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-slate-50 border border-blue-100/60">
         <div>

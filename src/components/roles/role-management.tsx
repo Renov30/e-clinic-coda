@@ -1,5 +1,8 @@
 "use client";
 
+// ==========================================
+// 1. IMPORTS & DEPENDENCIES
+// ==========================================
 import React, { useState, useTransition } from "react";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
@@ -26,11 +29,20 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
+// ==========================================
+// 2. TYPES & INTERFACES
+// ==========================================
 interface RoleManagementProps {
   initialRoles: RoleWithPermissions[];
 }
 
+// ==========================================
+// 3. MAIN COMPONENT (RoleManagement)
+// ==========================================
 export function RoleManagement({ initialRoles }: RoleManagementProps) {
+  // ----------------------------------------
+  // 3.1 State & Hooks
+  // ----------------------------------------
   const [roles, setRoles] = useState<RoleWithPermissions[]>(initialRoles);
   const [isPending, startTransition] = useTransition();
 
@@ -171,25 +183,37 @@ export function RoleManagement({ initialRoles }: RoleManagementProps) {
     });
   };
 
+  // ----------------------------------------
+  // 3.4 Render UI
+  // ----------------------------------------
   return (
-    <div className="space-y-5">
-      {/* Tab Switcher Sub-Navigation */}
-      <div className="flex border-b border-slate-200">
-        <Link
-          href="/users"
-          className="px-4 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-800 border-b-2 border-transparent hover:border-slate-300 transition-colors"
+    <div className="space-y-6">
+      {/* 3.4.1 Top Bar & Sub-Navigation */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-3">
+        <div className="flex items-center space-x-2">
+          <Link
+            href="/users"
+            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+          >
+            Daftar Pengguna
+          </Link>
+          <Link
+            href="/roles"
+            className="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-xs transition-colors"
+          >
+            Peran & Hak Akses ({roles.length})
+          </Link>
+        </div>
+
+        <Button
+          onClick={() => setIsCreateOpen(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-xs rounded-xl h-10 px-4 text-xs"
         >
-          Daftar Pengguna
-        </Link>
-        <Link
-          href="/roles"
-          className="px-4 py-2.5 text-sm font-semibold text-blue-600 border-b-2 border-blue-600 transition-colors"
-        >
-          Peran & Hak Akses
-        </Link>
+          + Tambah Peran Baru
+        </Button>
       </div>
 
-      {/* Top Banner / Notification */}
+      {/* 3.4.2 Banner Notifications */}
       {notification && (
         <div
           className={`flex items-center justify-between p-3.5 rounded-xl border text-sm transition-all ${
@@ -198,7 +222,7 @@ export function RoleManagement({ initialRoles }: RoleManagementProps) {
               : "bg-rose-50 border-rose-200 text-rose-800"
           }`}
         >
-          <span className="font-medium">{notification.message}</span>
+          <span className="font-medium text-xs sm:text-sm">{notification.message}</span>
           <button
             onClick={() => setNotification(null)}
             className="text-slate-400 hover:text-slate-600 text-xs font-semibold ml-4"
@@ -208,26 +232,7 @@ export function RoleManagement({ initialRoles }: RoleManagementProps) {
         </div>
       )}
 
-      {/* Header Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-        <div>
-          <span className="text-sm font-semibold text-slate-800">
-            Daftar Peran ({roles.length})
-          </span>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Atur wewenang modul dan batasan halaman untuk setiap kelompok pengguna klinik.
-          </p>
-        </div>
-
-        <Button
-          onClick={() => setIsCreateOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-xs rounded-xl h-10 px-4 text-xs"
-        >
-          Tambah Peran Baru
-        </Button>
-      </div>
-
-      {/* Roles Table */}
+      {/* 3.4.3 Roles Table */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">

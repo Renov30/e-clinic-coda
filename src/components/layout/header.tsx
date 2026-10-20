@@ -1,9 +1,12 @@
 "use client";
 
+// ==========================================
+// 1. IMPORTS & DEPENDENCIES
+// ==========================================
 import React, { useState, useMemo, useTransition } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import {
-  Search,
   Sun,
   Moon,
   Bell,
@@ -32,22 +35,28 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { UserSessionPayload } from "@/lib/auth/session";
 import { logoutAction } from "@/modules/users/actions";
 import { canManageUsers, canManageSettings } from "@/lib/auth/permissions";
 
+// ==========================================
+// 2. TYPES & INTERFACES
+// ==========================================
 interface HeaderProps {
   title?: string;
   doctorName?: string;
   currentUser?: UserSessionPayload | null;
 }
 
+// ==========================================
+// 3. CONSTANTS & ROUTE TITLES
+// ==========================================
 const ROUTE_TITLES: Record<string, string> = {
   "/": "Dashboard",
   "/patients": "Registrasi & Data Pasien",
   "/appointments": "Antrean & Janji Temu",
   "/pharmacy": "Penjualan Obat Luar",
+  "/medicines": "Data & Stok Obat",
   "/schedule": "Jadwal Praktik Dokter",
   "/doctors": "Dokter & Poliklinik",
   "/users": "Manajemen Pengguna",
@@ -63,17 +72,25 @@ const ROLE_LABELS: Record<string, string> = {
   farmasi: "Staf Farmasi",
 };
 
+// ==========================================
+// 4. MAIN COMPONENT (Header)
+// ==========================================
 export function Header({
   title,
   doctorName = "Dr. Shin Tamura",
   currentUser,
 }: HeaderProps) {
+  // ----------------------------------------
+  // 4.1 State & Hooks
+  // ----------------------------------------
   const pathname = usePathname();
   const [isDark, setIsDark] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
   const [isLoggingOut, startTransition] = useTransition();
 
+  // ----------------------------------------
+  // 4.2 Derived State & Calculations
+  // ----------------------------------------
   const pageTitle = useMemo(() => {
     if (title) return title;
     return ROUTE_TITLES[pathname] || "e-clinic-coda";
@@ -93,6 +110,9 @@ export function Header({
       .toUpperCase();
   }, [displayName]);
 
+  // ----------------------------------------
+  // 4.3 Handlers
+  // ----------------------------------------
   const toggleTheme = () => {
     setIsDark(!isDark);
   };
@@ -103,31 +123,20 @@ export function Header({
     });
   };
 
+  // ----------------------------------------
+  // 4.4 Render UI
+  // ----------------------------------------
   return (
     <>
       <header className="flex h-20 items-center justify-between px-8 border-b border-slate-200/80 bg-white shrink-0">
-        {/* Title */}
+        {/* 4.4.1 Page Title (Left) */}
         <div className="flex items-center min-w-[200px]">
           <h1 className="text-2xl font-bold tracking-tight text-slate-800 transition-colors">
             {pageTitle}
           </h1>
         </div>
 
-        {/* Center Search Bar */}
-        <div className="flex-1 max-w-md mx-6">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              className="w-full h-10 pl-11 pr-4 rounded-full bg-slate-50 border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-            />
-          </div>
-        </div>
-
-        {/* Right Controls */}
+        {/* 4.4.2 User Profile & Quick Controls (Right) */}
         <div className="flex items-center space-x-3">
           {/* Theme Toggle */}
           <button
@@ -217,7 +226,7 @@ export function Header({
         </div>
       </header>
 
-      {/* Dialog Konfirmasi Logout Kustom */}
+      {/* 4.4.3 Custom Logout Confirmation Dialog */}
       <Dialog open={isLogoutDialogOpen} onOpenChange={setIsLogoutDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

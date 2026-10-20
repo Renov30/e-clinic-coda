@@ -1,5 +1,8 @@
 "use client";
 
+// ==========================================
+// 1. IMPORTS & DEPENDENCIES
+// ==========================================
 import React, { useState, useTransition } from "react";
 import Link from "next/link";
 import {
@@ -41,17 +44,26 @@ import {
 import { formatCurrency } from "@/lib/utils";
 import { ClinicConfig } from "@/modules/clinic-config/types";
 
+// ==========================================
+// 2. TYPES & INTERFACES
+// ==========================================
 interface PharmacyPosProps {
   initialMedicines: MedicineItem[];
   initialSales: SaleHistoryItem[];
   clinicConfig: ClinicConfig;
 }
 
+// ==========================================
+// 3. MAIN COMPONENT (PharmacyPos)
+// ==========================================
 export function PharmacyPos({
   initialMedicines,
   initialSales,
   clinicConfig,
 }: PharmacyPosProps) {
+  // ----------------------------------------
+  // 3.1 State & Hooks
+  // ----------------------------------------
   const [activeTab, setActiveTab] = useState<"pos" | "history">("pos");
   const [medicines, setMedicines] = useState<MedicineItem[]>(initialMedicines);
   const [salesHistory, setSalesHistory] = useState<SaleHistoryItem[]>(initialSales);

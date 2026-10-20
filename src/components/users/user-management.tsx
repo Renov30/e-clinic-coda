@@ -1,5 +1,8 @@
 "use client";
 
+// ==========================================
+// 1. IMPORTS & DEPENDENCIES
+// ==========================================
 import React, { useState, useTransition, useMemo } from "react";
 import Link from "next/link";
 import { Search, Loader2, ChevronDown } from "lucide-react";
@@ -24,12 +27,18 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
+// ==========================================
+// 2. TYPES & INTERFACES
+// ==========================================
 interface UserManagementProps {
   initialUsers: User[];
   availableRoles?: RoleWithPermissions[];
   currentUserId?: string;
 }
 
+// ==========================================
+// 3. CONSTANTS & HELPER FUNCTIONS
+// ==========================================
 const ROLE_CONFIG: Record<
   string,
   { label: string; badgeVariant: "default" | "secondary" | "success" | "warning" }
@@ -52,11 +61,17 @@ const ROLE_CONFIG: Record<
   },
 };
 
+// ==========================================
+// 4. MAIN COMPONENT (UserManagement)
+// ==========================================
 export function UserManagement({
   initialUsers,
   availableRoles = [],
   currentUserId,
 }: UserManagementProps) {
+  // ----------------------------------------
+  // 4.1 State & Hooks
+  // ----------------------------------------
   const [users, setUsers] = useState<User[]>(initialUsers);
   const [search, setSearch] = useState("");
   const [filterRole, setFilterRole] = useState<string>("all");
@@ -236,25 +251,37 @@ export function UserManagement({
     });
   };
 
+  // ----------------------------------------
+  // 4.4 Render UI
+  // ----------------------------------------
   return (
-    <div className="space-y-5">
-      {/* Tab Switcher Sub-Navigation */}
-      <div className="flex border-b border-slate-200">
-        <Link
-          href="/users"
-          className="px-4 py-2.5 text-sm font-semibold text-blue-600 border-b-2 border-blue-600 transition-colors"
+    <div className="space-y-6">
+      {/* 4.4.1 Top Bar & Sub-Navigation */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-3">
+        <div className="flex items-center space-x-2">
+          <Link
+            href="/users"
+            className="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-xs transition-colors"
+          >
+            Daftar Pengguna ({users.length})
+          </Link>
+          <Link
+            href="/roles"
+            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+          >
+            Peran & Hak Akses
+          </Link>
+        </div>
+
+        <Button
+          onClick={() => setIsCreateOpen(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-xs rounded-xl h-10 px-4 text-xs"
         >
-          Daftar Pengguna
-        </Link>
-        <Link
-          href="/roles"
-          className="px-4 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-800 border-b-2 border-transparent hover:border-slate-300 transition-colors"
-        >
-          Peran & Hak Akses
-        </Link>
+          + Tambah Pengguna Baru
+        </Button>
       </div>
 
-      {/* Top Banner / Notification */}
+      {/* 4.4.2 Banner Notifications */}
       {notification && (
         <div
           className={`flex items-center justify-between p-3.5 rounded-xl border text-sm transition-all ${
@@ -356,17 +383,10 @@ export function UserManagement({
               <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
             </div>
           </div>
-
-          <Button
-            onClick={() => setIsCreateOpen(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-xs rounded-xl h-10 px-4 text-xs ml-auto md:ml-2"
-          >
-            Tambah Pengguna
-          </Button>
         </div>
       </div>
 
-      {/* Users Table */}
+      {/* 4.4.5 Users Table */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">

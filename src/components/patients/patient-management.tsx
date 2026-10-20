@@ -1,5 +1,8 @@
 "use client";
 
+// ==========================================
+// 1. IMPORTS & DEPENDENCIES
+// ==========================================
 import React, { useState, useTransition } from "react";
 import {
   Users,
@@ -38,6 +41,9 @@ import {
 } from "@/modules/patient-registration/actions";
 import { formatCurrency } from "@/lib/utils";
 
+// ==========================================
+// 2. TYPES & INTERFACES
+// ==========================================
 interface PatientManagementProps {
   initialPatients: Patient[];
   initialVisits: VisitRegistration[];
@@ -47,6 +53,9 @@ interface PatientManagementProps {
   nextNoRm: string;
 }
 
+// ==========================================
+// 3. MAIN COMPONENT (PatientManagement)
+// ==========================================
 export function PatientManagement({
   initialPatients,
   initialVisits,
@@ -55,6 +64,9 @@ export function PatientManagement({
   penjab,
   nextNoRm,
 }: PatientManagementProps) {
+  // ----------------------------------------
+  // 3.1 State & Hooks
+  // ----------------------------------------
   const [activeTab, setActiveTab] = useState<
     "visits_today" | "register_visit" | "patient_list" | "new_patient"
   >("visits_today");

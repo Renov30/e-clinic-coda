@@ -17,26 +17,13 @@ export default async function PatientsPage() {
   ]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div>
-          <h2 className="text-xl font-bold text-slate-800">
-            Registrasi Pasien & Rawat Jalan
-          </h2>
-          <p className="text-sm text-slate-500">
-            Pendaftaran pasien baru, pembuatan nomor rekam medis, dan antrean poli klinik.
-          </p>
-        </div>
-      </div>
-
-      <PatientManagement
-        initialPatients={patients}
-        initialVisits={visits}
-        doctors={masterData.doctors}
-        poliklinik={masterData.poliklinik}
-        penjab={masterData.penjab}
-        nextNoRm={masterData.nextNoRm}
-      />
-    </div>
+    <PatientManagement
+      initialPatients={patients}
+      initialVisits={visits}
+      doctors={masterData.doctors}
+      poliklinik={masterData.poliklinik}
+      penjab={masterData.penjab}
+      nextNoRm={masterData.nextNoRm}
+    />
   );
 }

@@ -12,16 +12,5 @@ export const metadata = {
 export default async function SettingsPage() {
   const clinicConfig = await clinicConfigService.getClinicProfile();
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold text-slate-800">Pengaturan Sistem & Instansi</h2>
-        <p className="text-sm text-slate-500 mt-1">
-          Kelola identitas instansi, konfigurasi database, dan preferensi operasional e-clinic-coda.
-        </p>
-      </div>
-
-      <ClinicProfileForm initialConfig={clinicConfig} />
-    </div>
-  );
+  return <ClinicProfileForm initialConfig={clinicConfig} />;
 }

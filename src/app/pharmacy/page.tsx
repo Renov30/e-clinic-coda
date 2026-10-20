@@ -18,24 +18,10 @@ export default async function PharmacyPage() {
   ]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div>
-          <h2 className="text-xl font-bold text-slate-800">
-            Penjualan Obat Luar (Farmasi)
-          </h2>
-          <p className="text-sm text-slate-500">
-            Kasir apotek, transaksi obat bebas/resep luar, dan pencetakan nota kuitansi resmi.
-          </p>
-        </div>
-      </div>
-
-      <PharmacyPos
-        initialMedicines={medicines}
-        initialSales={recentSales}
-        clinicConfig={clinicConfig}
-      />
-    </div>
+    <PharmacyPos
+      initialMedicines={medicines}
+      initialSales={recentSales}
+      clinicConfig={clinicConfig}
+    />
   );
 }
-

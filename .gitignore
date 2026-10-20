@@ -1,6 +1,10 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ==============================================================================
+# e-clinic-coda .gitignore
+# ==============================================================================
 
-# dependencies
+# ------------------------------------------------------------------------------
+# 1. Dependensi & Package Managers
+# ------------------------------------------------------------------------------
 /node_modules
 /.pnp
 .pnp.*
@@ -10,32 +14,112 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
+# ------------------------------------------------------------------------------
+# 2. Next.js, Bundler & Build Outputs
+# ------------------------------------------------------------------------------
 /.next/
 /out/
-
-# production
 /build
+/dist
+*.tsbuildinfo
+next-env.d.ts
 
-# misc
-.DS_Store
+# ------------------------------------------------------------------------------
+# 3. Environment Variables & Rahasia (Kredensial, Token, Private Keys)
+# ------------------------------------------------------------------------------
+# Abaikan seluruh file environment aktual yang berisi password/kredensial
+.env
+.env*.local
+.env.development
+.env.test
+.env.production
+.env.staging
+
+# Pengecualian: .env.example WAJIB tetap di-track sebagai template konfigurasi
+!.env.example
+
+# Kunci kriptografi, sertifikat, dan token
 *.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
 
-# debug
+# ------------------------------------------------------------------------------
+# 4. Database Local Dumps, Backups & Persistensi
+# ------------------------------------------------------------------------------
+# Backup database legacy SIMKhanza / SQL dump sensitif lokal
+*.sql.gz
+*.dump
+*.backup
+*.sqlite
+*.sqlite3
+*.db
+/mysql_data/
+/docker-data/
+
+# ------------------------------------------------------------------------------
+# 5. Logs & Debugging
+# ------------------------------------------------------------------------------
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+lerna-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# ------------------------------------------------------------------------------
+# 6. Pengujian & Coverage
+# ------------------------------------------------------------------------------
+/coverage
+/.nyc_output
+junit.xml
 
-# vercel
+# ------------------------------------------------------------------------------
+# 7. Cache & Temporary Files
+# ------------------------------------------------------------------------------
+.cache/
+.turbo/
+.temp/
+.tmp/
+tmp/
+temp/
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# ------------------------------------------------------------------------------
+# 8. Konfigurasi IDE & Editor Pengembang
+# ------------------------------------------------------------------------------
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# ------------------------------------------------------------------------------
+# 9. Sistem Operasi (macOS, Windows, Linux)
+# ------------------------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.fuse_hidden*
+.directory

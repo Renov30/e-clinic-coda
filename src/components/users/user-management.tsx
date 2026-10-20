@@ -1,22 +1,7 @@
 "use client";
 
 import React, { useState, useTransition, useMemo } from "react";
-import {
-  Users,
-  UserPlus,
-  Shield,
-  Key,
-  Edit,
-  CheckCircle2,
-  XCircle,
-  Search,
-  Filter,
-  Loader2,
-  Lock,
-  Stethoscope,
-  Pill,
-  ClipboardList,
-} from "lucide-react";
+import { Search, Loader2, ChevronDown } from "lucide-react";
 import { User, UserRole, UserStatus } from "@/modules/users/types";
 import {
   createUserAction,
@@ -44,27 +29,23 @@ interface UserManagementProps {
 
 const ROLE_CONFIG: Record<
   UserRole,
-  { label: string; badgeVariant: "default" | "secondary" | "success" | "warning"; icon: React.ElementType }
+  { label: string; badgeVariant: "default" | "secondary" | "success" | "warning" }
 > = {
   admin: {
     label: "Administrator",
     badgeVariant: "default",
-    icon: Shield,
   },
   dokter: {
     label: "Dokter",
     badgeVariant: "secondary",
-    icon: Stethoscope,
   },
   pendaftaran: {
     label: "Pendaftaran",
     badgeVariant: "warning",
-    icon: ClipboardList,
   },
   farmasi: {
     label: "Farmasi",
     badgeVariant: "success",
-    icon: Pill,
   },
 };
 
@@ -252,101 +233,54 @@ export function UserManagement({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Top Banner / Notification */}
       {notification && (
         <div
-          className={`flex items-center justify-between p-4 rounded-xl border text-sm transition-all ${
+          className={`flex items-center justify-between p-3.5 rounded-xl border text-sm transition-all ${
             notification.type === "success"
               ? "bg-emerald-50 border-emerald-200 text-emerald-800"
               : "bg-rose-50 border-rose-200 text-rose-800"
           }`}
         >
-          <div className="flex items-center space-x-2.5">
-            {notification.type === "success" ? (
-              <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
-            ) : (
-              <XCircle className="h-5 w-5 text-rose-600 shrink-0" />
-            )}
-            <span className="font-medium">{notification.message}</span>
-          </div>
+          <span className="font-medium">{notification.message}</span>
           <button
             onClick={() => setNotification(null)}
-            className="text-slate-400 hover:text-slate-600 text-xs font-semibold"
+            className="text-slate-400 hover:text-slate-600 text-xs font-semibold ml-4"
           >
             Tutup
           </button>
         </div>
       )}
 
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900">
-            Manajemen Pengguna & Hak Akses
-          </h2>
-          <p className="text-sm text-slate-500 mt-0.5">
-            Kelola akun staf medis, dokter, petugas registrasi, dan staf farmasi.
-          </p>
-        </div>
-
-        <Button
-          onClick={() => setIsCreateOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm transition-all rounded-xl"
-        >
-          <UserPlus className="h-4 w-4 mr-2" />
-          Tambah Pengguna
-        </Button>
-      </div>
-
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">Total Akun</span>
-            <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
-              <Users className="h-4 w-4" />
-            </div>
-          </div>
-          <div className="mt-2 text-2xl font-bold text-slate-800">{stats.total}</div>
+          <span className="text-xs font-medium text-slate-500 block">Total Akun</span>
+          <div className="mt-1 text-2xl font-bold text-slate-800">{stats.total}</div>
           <span className="text-[11px] text-slate-400">Terdaftar di sistem</span>
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">Akun Aktif</span>
-            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
-              <CheckCircle2 className="h-4 w-4" />
-            </div>
-          </div>
-          <div className="mt-2 text-2xl font-bold text-emerald-700">{stats.active}</div>
-          <span className="text-[11px] text-slate-400">Dapat melakukan login</span>
+          <span className="text-xs font-medium text-slate-500 block">Akun Aktif</span>
+          <div className="mt-1 text-2xl font-bold text-emerald-700">{stats.active}</div>
+          <span className="text-[11px] text-slate-400">Dapat masuk sistem</span>
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">Dokter Praktik</span>
-            <div className="p-2 bg-purple-50 text-purple-600 rounded-xl">
-              <Stethoscope className="h-4 w-4" />
-            </div>
-          </div>
-          <div className="mt-2 text-2xl font-bold text-slate-800">{stats.doctors}</div>
+          <span className="text-xs font-medium text-slate-500 block">Dokter Praktik</span>
+          <div className="mt-1 text-2xl font-bold text-slate-800">{stats.doctors}</div>
           <span className="text-[11px] text-slate-400">Tenaga medis</span>
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-500">Administrator</span>
-            <div className="p-2 bg-slate-100 text-slate-700 rounded-xl">
-              <Shield className="h-4 w-4" />
-            </div>
-          </div>
-          <div className="mt-2 text-2xl font-bold text-slate-800">{stats.admins}</div>
-          <span className="text-[11px] text-slate-400">Akses penuh sistem</span>
+          <span className="text-xs font-medium text-slate-500 block">Administrator</span>
+          <div className="mt-1 text-2xl font-bold text-slate-800">{stats.admins}</div>
+          <span className="text-[11px] text-slate-400">Akses konfigurasi</span>
         </div>
       </div>
 
-      {/* Search and Filters */}
+      {/* Search, Filters & Action Bar */}
       <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row gap-3 items-center justify-between">
         <div className="relative w-full md:w-80">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -358,35 +292,47 @@ export function UserManagement({
           />
         </div>
 
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="flex items-center space-x-2">
-            <Filter className="h-4 w-4 text-slate-400" />
+        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+          <div className="flex items-center space-x-1.5">
             <span className="text-xs font-medium text-slate-500 hidden sm:inline">Peran:</span>
-            <select
-              value={filterRole}
-              onChange={(e) => setFilterRole(e.target.value)}
-              className="h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            >
-              <option value="all">Semua Peran</option>
-              <option value="admin">Administrator</option>
-              <option value="dokter">Dokter</option>
-              <option value="pendaftaran">Petugas Pendaftaran</option>
-              <option value="farmasi">Staf Farmasi</option>
-            </select>
+            <div className="relative">
+              <select
+                value={filterRole}
+                onChange={(e) => setFilterRole(e.target.value)}
+                className="h-10 pl-3 pr-8 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600 appearance-none cursor-pointer"
+              >
+                <option value="all">Semua Peran</option>
+                <option value="admin">Administrator</option>
+                <option value="dokter">Dokter</option>
+                <option value="pendaftaran">Petugas Pendaftaran</option>
+                <option value="farmasi">Staf Farmasi</option>
+              </select>
+              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+            </div>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1.5">
             <span className="text-xs font-medium text-slate-500 hidden sm:inline">Status:</span>
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="h-10 px-3 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            >
-              <option value="all">Semua Status</option>
-              <option value="active">Aktif</option>
-              <option value="inactive">Nonaktif</option>
-            </select>
+            <div className="relative">
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="h-10 pl-3 pr-8 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600 appearance-none cursor-pointer"
+              >
+                <option value="all">Semua Status</option>
+                <option value="active">Aktif</option>
+                <option value="inactive">Nonaktif</option>
+              </select>
+              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+            </div>
           </div>
+
+          <Button
+            onClick={() => setIsCreateOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-xs rounded-xl h-10 px-4 text-xs ml-auto md:ml-2"
+          >
+            Tambah Pengguna
+          </Button>
         </div>
       </div>
 
@@ -406,8 +352,7 @@ export function UserManagement({
             <tbody className="divide-y divide-slate-100">
               {filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-12 text-center text-slate-400">
-                    <Users className="h-8 w-8 mx-auto mb-2 text-slate-300" />
+                  <td colSpan={5} className="py-12 text-center text-slate-400 text-sm">
                     Tidak ada pengguna yang sesuai dengan pencarian atau filter.
                   </td>
                 </tr>
@@ -416,9 +361,7 @@ export function UserManagement({
                   const roleMeta = ROLE_CONFIG[u.role] || {
                     label: u.role,
                     badgeVariant: "secondary",
-                    icon: Users,
                   };
-                  const RoleIcon = roleMeta.icon;
                   const isCurrentAccount = currentUserId === u.id;
                   const isActive = u.status === "aktif";
 
@@ -460,22 +403,19 @@ export function UserManagement({
                       <td className="py-4 px-5">
                         <Badge
                           variant={roleMeta.badgeVariant}
-                          className="flex items-center w-fit space-x-1.5 px-2.5 py-1"
+                          className="px-2.5 py-0.5 font-medium text-xs"
                         >
-                          <RoleIcon className="h-3.5 w-3.5" />
-                          <span>{roleMeta.label}</span>
+                          {roleMeta.label}
                         </Badge>
                       </td>
 
                       <td className="py-4 px-5">
                         {isActive ? (
-                          <span className="inline-flex items-center text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />
+                          <span className="inline-flex items-center text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
                             Aktif
                           </span>
                         ) : (
-                          <span className="inline-flex items-center text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200">
-                            <span className="h-1.5 w-1.5 rounded-full bg-slate-400 mr-1.5" />
+                          <span className="inline-flex items-center text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
                             Nonaktif
                           </span>
                         )}
@@ -492,49 +432,36 @@ export function UserManagement({
                       </td>
 
                       <td className="py-4 px-5 text-right">
-                        <div className="flex items-center justify-end space-x-1">
+                        <div className="flex items-center justify-end space-x-3 text-xs">
                           <button
                             type="button"
                             onClick={() => openResetPassword(u)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors"
-                            title="Reset Kata Sandi"
+                            className="font-medium text-slate-500 hover:text-amber-700 hover:underline"
                           >
-                            <Key className="h-4 w-4" />
+                            Reset Sandi
                           </button>
 
                           <button
                             type="button"
                             onClick={() => openEditDialog(u)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
-                            title="Edit Data Pengguna"
+                            className="font-medium text-slate-500 hover:text-blue-700 hover:underline"
                           >
-                            <Edit className="h-4 w-4" />
+                            Edit
                           </button>
 
                           <button
                             type="button"
                             onClick={() => handleToggleStatus(u)}
                             disabled={isCurrentAccount}
-                            className={`p-1.5 rounded-lg transition-colors ${
+                            className={`font-medium ${
                               isCurrentAccount
-                                ? "text-slate-200 cursor-not-allowed"
+                                ? "text-slate-300 cursor-not-allowed"
                                 : isActive
-                                ? "text-slate-400 hover:text-rose-600 hover:bg-rose-50"
-                                : "text-slate-400 hover:text-emerald-600 hover:bg-emerald-50"
+                                ? "text-slate-500 hover:text-rose-600 hover:underline"
+                                : "text-slate-500 hover:text-emerald-600 hover:underline"
                             }`}
-                            title={
-                              isCurrentAccount
-                                ? "Tidak dapat menonaktifkan akun sendiri"
-                                : isActive
-                                ? "Nonaktifkan Akun"
-                                : "Aktifkan Akun"
-                            }
                           >
-                            {isActive ? (
-                              <XCircle className="h-4 w-4" />
-                            ) : (
-                              <CheckCircle2 className="h-4 w-4" />
-                            )}
+                            {isActive ? "Nonaktifkan" : "Aktifkan"}
                           </button>
                         </div>
                       </td>
@@ -556,7 +483,7 @@ export function UserManagement({
                 Tambah Pengguna Baru
               </DialogTitle>
               <DialogDescription className="text-sm text-slate-500">
-                Buat kredensial login untuk petugas atau staf medis klinik.
+                Buat kredensial login untuk staf atau tenaga medis klinik.
               </DialogDescription>
             </DialogHeader>
 
@@ -617,21 +544,24 @@ export function UserManagement({
                 <label className="text-xs font-semibold text-slate-700 block mb-1.5">
                   Hak Akses / Peran <span className="text-rose-500">*</span>
                 </label>
-                <select
-                  value={createForm.role}
-                  onChange={(e) =>
-                    setCreateForm({
-                      ...createForm,
-                      role: e.target.value as UserRole,
-                    })
-                  }
-                  className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                >
-                  <option value="pendaftaran">Petugas Pendaftaran & Kasir</option>
-                  <option value="dokter">Dokter / Tenaga Medis</option>
-                  <option value="farmasi">Staf Farmasi / Apotek</option>
-                  <option value="admin">Administrator Sistem</option>
-                </select>
+                <div className="relative">
+                  <select
+                    value={createForm.role}
+                    onChange={(e) =>
+                      setCreateForm({
+                        ...createForm,
+                        role: e.target.value as UserRole,
+                      })
+                    }
+                    className="w-full h-10 pl-3 pr-9 rounded-xl border border-slate-200 text-sm bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 appearance-none cursor-pointer"
+                  >
+                    <option value="pendaftaran">Petugas Pendaftaran & Kasir</option>
+                    <option value="dokter">Dokter / Tenaga Medis</option>
+                    <option value="farmasi">Staf Farmasi / Apotek</option>
+                    <option value="admin">Administrator Sistem</option>
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+                </div>
               </div>
             </div>
 
@@ -695,21 +625,24 @@ export function UserManagement({
                 <label className="text-xs font-semibold text-slate-700 block mb-1.5">
                   Hak Akses / Peran
                 </label>
-                <select
-                  value={editForm.role}
-                  onChange={(e) =>
-                    setEditForm({
-                      ...editForm,
-                      role: e.target.value as UserRole,
-                    })
-                  }
-                  className="w-full h-10 px-3 rounded-xl border border-slate-200 text-sm bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                >
-                  <option value="pendaftaran">Petugas Pendaftaran & Kasir</option>
-                  <option value="dokter">Dokter / Tenaga Medis</option>
-                  <option value="farmasi">Staf Farmasi / Apotek</option>
-                  <option value="admin">Administrator Sistem</option>
-                </select>
+                <div className="relative">
+                  <select
+                    value={editForm.role}
+                    onChange={(e) =>
+                      setEditForm({
+                        ...editForm,
+                        role: e.target.value as UserRole,
+                      })
+                    }
+                    className="w-full h-10 pl-3 pr-9 rounded-xl border border-slate-200 text-sm bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 appearance-none cursor-pointer"
+                  >
+                    <option value="pendaftaran">Petugas Pendaftaran & Kasir</option>
+                    <option value="dokter">Dokter / Tenaga Medis</option>
+                    <option value="farmasi">Staf Farmasi / Apotek</option>
+                    <option value="admin">Administrator Sistem</option>
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+                </div>
               </div>
 
               <div className="pt-2">
@@ -779,34 +712,28 @@ export function UserManagement({
                 <label className="text-xs font-semibold text-slate-700 block mb-1.5">
                   Kata Sandi Baru <span className="text-rose-500">*</span>
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                  <Input
-                    required
-                    type="password"
-                    placeholder="Minimal 6 karakter"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="pl-10 rounded-xl"
-                  />
-                </div>
+                <Input
+                  required
+                  type="password"
+                  placeholder="Minimal 6 karakter"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="rounded-xl"
+                />
               </div>
 
               <div>
                 <label className="text-xs font-semibold text-slate-700 block mb-1.5">
                   Konfirmasi Kata Sandi Baru <span className="text-rose-500">*</span>
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                  <Input
-                    required
-                    type="password"
-                    placeholder="Ulangi kata sandi baru"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pl-10 rounded-xl"
-                  />
-                </div>
+                <Input
+                  required
+                  type="password"
+                  placeholder="Ulangi kata sandi baru"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="rounded-xl"
+                />
               </div>
             </div>
 
@@ -840,4 +767,3 @@ export function UserManagement({
     </div>
   );
 }
-

@@ -9,8 +9,7 @@ import {
   Clock,
   Users,
   Stethoscope,
-  MessageSquare,
-  CreditCard,
+  Pill,
   Settings,
   HelpCircle,
   LogOut,
@@ -25,12 +24,11 @@ interface SidebarProps {
 
 const NAV_ITEMS = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
-  { name: "Schedule", href: "/schedule", icon: Calendar },
-  { name: "Appointments", href: "/appointments", icon: Clock },
-  { name: "Patients", href: "/patients", icon: Users },
-  { name: "Doctors", href: "/doctors", icon: Stethoscope },
-  { name: "Messages", href: "/messages", icon: MessageSquare },
-  { name: "Payments", href: "/payments", icon: CreditCard },
+  { name: "Registrasi Pasien", href: "/patients", icon: Users },
+  { name: "Antrean & Jadwal", href: "/appointments", icon: Clock },
+  { name: "Penjualan Obat Luar", href: "/pharmacy", icon: Pill },
+  { name: "Dokter & Poliklinik", href: "/doctors", icon: Stethoscope },
+  { name: "Jadwal Praktik", href: "/schedule", icon: Calendar },
 ];
 
 const BOTTOM_ITEMS = [

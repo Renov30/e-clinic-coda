@@ -21,14 +21,13 @@ interface HeaderProps {
 
 const ROUTE_TITLES: Record<string, string> = {
   "/": "Dashboard",
-  "/appointments": "Appointments",
-  "/schedule": "Schedule",
-  "/patients": "Patients",
-  "/doctors": "Doctors",
-  "/messages": "Messages",
-  "/payments": "Payments",
-  "/settings": "Settings",
-  "/support": "Support",
+  "/patients": "Registrasi & Data Pasien",
+  "/appointments": "Antrean & Janji Temu",
+  "/pharmacy": "Penjualan Obat Luar",
+  "/schedule": "Jadwal Praktik Dokter",
+  "/doctors": "Dokter & Poliklinik",
+  "/settings": "Pengaturan Instansi",
+  "/support": "Bantuan & Sistem",
 };
 
 export function Header({

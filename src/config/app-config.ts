@@ -17,40 +17,29 @@ export const APP_CONFIG = {
       iconName: "LayoutDashboard",
     },
     {
-      name: "Schedule",
-      href: "/schedule",
-      iconName: "Calendar",
-      disabled: false,
-    },
-    {
-      name: "Appointments",
-      href: "/appointments",
-      iconName: "Clock",
-      disabled: false,
-    },
-    {
-      name: "Patients",
+      name: "Registrasi Pasien",
       href: "/patients",
       iconName: "Users",
       disabled: false,
     },
     {
-      name: "Doctors",
-      href: "/doctors",
-      iconName: "Stethoscope",
+      name: "Antrean & Jadwal",
+      href: "/appointments",
+      iconName: "Clock",
       disabled: false,
     },
     {
-      name: "Messages",
-      href: "/messages",
-      iconName: "MessageSquare",
-      disabled: true,
+      name: "Penjualan Obat Luar",
+      href: "/pharmacy",
+      iconName: "Pill",
+      badge: "Farmasi",
+      disabled: false,
     },
     {
-      name: "Payments",
-      href: "/payments",
-      iconName: "CreditCard",
-      disabled: true,
+      name: "Dokter & Poliklinik",
+      href: "/doctors",
+      iconName: "Stethoscope",
+      disabled: false,
     },
   ] as NavigationItem[],
   bottomNav: [
@@ -66,4 +55,3 @@ export const APP_CONFIG = {
     },
   ] as NavigationItem[],
 };
-

@@ -1,8 +1,19 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useTransition } from "react";
 import { usePathname } from "next/navigation";
-import { Search, Sun, Moon, Bell, ChevronDown, User, ShieldCheck } from "lucide-react";
+import {
+  Search,
+  Sun,
+  Moon,
+  Bell,
+  ChevronDown,
+  User,
+  ShieldCheck,
+  LogOut,
+  UserCog,
+  Loader2,
+} from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -13,10 +24,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { UserSessionPayload } from "@/lib/auth/session";
+import { logoutAction } from "@/modules/users/actions";
 
 interface HeaderProps {
   title?: string;
   doctorName?: string;
+  currentUser?: UserSessionPayload | null;
 }
 
 const ROUTE_TITLES: Record<string, string> = {
@@ -26,25 +40,57 @@ const ROUTE_TITLES: Record<string, string> = {
   "/pharmacy": "Penjualan Obat Luar",
   "/schedule": "Jadwal Praktik Dokter",
   "/doctors": "Dokter & Poliklinik",
+  "/users": "Manajemen Pengguna & Hak Akses",
   "/settings": "Pengaturan Instansi",
   "/support": "Bantuan & Sistem",
+};
+
+const ROLE_LABELS: Record<string, string> = {
+  admin: "Administrator",
+  dokter: "Dokter Penanggung Jawab",
+  pendaftaran: "Petugas Pendaftaran",
+  farmasi: "Staf Farmasi",
 };
 
 export function Header({
   title,
   doctorName = "Dr. Shin Tamura",
+  currentUser,
 }: HeaderProps) {
   const pathname = usePathname();
   const [isDark, setIsDark] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [isLoggingOut, startTransition] = useTransition();
 
   const pageTitle = useMemo(() => {
     if (title) return title;
     return ROUTE_TITLES[pathname] || "e-clinic-coda";
   }, [title, pathname]);
 
+  const displayName = currentUser?.namaLengkap || doctorName;
+  const displayRole = currentUser?.role
+    ? ROLE_LABELS[currentUser.role] || currentUser.role
+    : "Dokter Penanggung Jawab";
+
+  const userInitials = useMemo(() => {
+    return displayName
+      .split(" ")
+      .map((part) => part[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
+  }, [displayName]);
+
   const toggleTheme = () => {
     setIsDark(!isDark);
+  };
+
+  const handleLogout = () => {
+    if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
+      startTransition(async () => {
+        await logoutAction();
+      });
+    }
   };
 
   return (
@@ -100,23 +146,37 @@ export function Header({
             <button className="flex items-center space-x-3 rounded-full py-1.5 pl-1.5 pr-3 hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all focus:outline-none">
               <Avatar className="h-9 w-9">
                 <AvatarFallback className="bg-blue-100 text-blue-700 font-semibold text-xs">
-                  ST
+                  {userInitials}
                 </AvatarFallback>
               </Avatar>
-              <span className="text-sm font-semibold text-slate-700 hidden sm:inline-block">
-                {doctorName}
-              </span>
+              <div className="flex flex-col text-left hidden sm:flex">
+                <span className="text-sm font-semibold text-slate-700 leading-tight">
+                  {displayName}
+                </span>
+                <span className="text-[10px] text-slate-400 font-medium">
+                  {displayRole}
+                </span>
+              </div>
               <ChevronDown className="h-4 w-4 text-slate-400" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 mt-1">
+          <DropdownMenuContent align="end" className="w-60 mt-1">
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-semibold text-slate-800">{doctorName}</p>
-                <p className="text-xs text-slate-500">Dokter Penanggung Jawab</p>
+                <p className="text-sm font-semibold text-slate-800">{displayName}</p>
+                <p className="text-xs text-slate-500">{displayRole}</p>
+                {currentUser?.username && (
+                  <p className="text-[11px] text-blue-600 font-mono">@{currentUser.username}</p>
+                )}
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href="/users" className="flex items-center cursor-pointer">
+                <UserCog className="mr-2 h-4 w-4 text-slate-500" />
+                <span>Manajemen Pengguna</span>
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/settings" className="flex items-center cursor-pointer">
                 <User className="mr-2 h-4 w-4 text-slate-500" />
@@ -132,11 +192,15 @@ export function Header({
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="text-rose-600 focus:text-rose-600 focus:bg-rose-50 cursor-pointer"
-              onClick={() => {
-                alert("Sesi Anda telah diakhiri.");
-              }}
+              onClick={handleLogout}
+              disabled={isLoggingOut}
             >
-              Keluar
+              {isLoggingOut ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin text-rose-600" />
+              ) : (
+                <LogOut className="mr-2 h-4 w-4 text-rose-600" />
+              )}
+              <span>Keluar dari Sistem</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -144,4 +208,3 @@ export function Header({
     </header>
   );
 }
-

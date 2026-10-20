@@ -45,7 +45,7 @@ services:
       NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-e-clinic-coda}
       NEXT_PUBLIC_APP_VERSION: ${NEXT_PUBLIC_APP_VERSION:-0.1.0}
     ports:
-      - "${APP_PORT:-3001}:3000"
+      - "3000:3000"
     depends_on:
       db:
         condition: service_healthy

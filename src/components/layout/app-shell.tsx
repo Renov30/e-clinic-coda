@@ -28,7 +28,7 @@ export function AppShell({
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-white">
       {/* Left Sidebar */}
-      <Sidebar clinicName={clinicName} currentUser={currentUser} />
+      <Sidebar clinicName={clinicName} />
 
       {/* Right Main Content Area */}
       <div className="flex flex-1 flex-col overflow-hidden bg-white min-w-0">

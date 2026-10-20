@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -13,18 +13,13 @@ import {
   UserCog,
   Settings,
   HelpCircle,
-  LogOut,
   Menu,
   HeartPulse,
-  Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { UserSessionPayload } from "@/lib/auth/session";
-import { logoutAction } from "@/modules/users/actions";
 
 interface SidebarProps {
   clinicName?: string;
-  currentUser?: UserSessionPayload | null;
 }
 
 const NAV_ITEMS = [
@@ -42,18 +37,9 @@ const BOTTOM_ITEMS = [
   { name: "Support", href: "/support", icon: HelpCircle },
 ];
 
-export function Sidebar({ clinicName = "Smile360", currentUser }: SidebarProps) {
+export function Sidebar({ clinicName = "Smile360" }: SidebarProps) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
-  const [isLoggingOut, startTransition] = useTransition();
-
-  const handleLogout = () => {
-    if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
-      startTransition(async () => {
-        await logoutAction();
-      });
-    }
-  };
 
   return (
     <aside
@@ -161,47 +147,6 @@ export function Sidebar({ clinicName = "Smile360", currentUser }: SidebarProps) 
             </Link>
           );
         })}
-
-        {/* User Card when collapsed is false */}
-        {!collapsed && currentUser && (
-          <div className="px-3.5 py-2.5 my-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center space-x-3">
-            <div className="h-8 w-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">
-              {currentUser.namaLengkap
-                .split(" ")
-                .map((n) => n[0])
-                .slice(0, 2)
-                .join("")
-                .toUpperCase()}
-            </div>
-            <div className="overflow-hidden">
-              <p className="text-xs font-semibold text-slate-800 truncate">
-                {currentUser.namaLengkap}
-              </p>
-              <p className="text-[10px] text-slate-400 capitalize">
-                {currentUser.role}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Log Out button */}
-        <button
-          type="button"
-          onClick={handleLogout}
-          disabled={isLoggingOut}
-          className={cn(
-            "w-full flex items-center rounded-xl text-sm font-medium text-slate-500 hover:text-rose-600 hover:bg-rose-50/50 transition-all group disabled:opacity-50",
-            collapsed ? "justify-center p-3" : "px-3.5 py-2.5 space-x-3.5"
-          )}
-          title={collapsed ? "Keluar Sistem" : undefined}
-        >
-          {isLoggingOut ? (
-            <Loader2 className="h-5 w-5 shrink-0 animate-spin text-rose-600" />
-          ) : (
-            <LogOut className="h-5 w-5 shrink-0 text-slate-400 group-hover:text-rose-600" />
-          )}
-          {!collapsed && <span>Keluar Sistem</span>}
-        </button>
       </div>
     </aside>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useTransition } from "react";
+import Link from "next/link";
 import {
   Search,
   ShoppingCart,
@@ -260,6 +261,16 @@ export function PharmacyPos({
             </span>
           </button>
         </div>
+
+        <Link href="/medicines">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9 px-3.5 rounded-xl text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 hover:text-blue-800 transition-colors shadow-2xs"
+          >
+            Kelola Stok & Data Obat
+          </Button>
+        </Link>
       </div>
 
       {/* Notifications */}

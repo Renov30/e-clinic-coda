@@ -37,6 +37,13 @@ export const AVAILABLE_PERMISSIONS: PermissionDefinition[] = [
     route: "/pharmacy",
   },
   {
+    key: "access:medicines",
+    label: "Data Obat & Stok",
+    category: "Navigasi Menu",
+    description: "Mengelola katalog obat, harga, dan stok depo apotek",
+    route: "/medicines",
+  },
+  {
     key: "access:doctors",
     label: "Dokter & Poliklinik",
     category: "Navigasi Menu",
@@ -97,6 +104,12 @@ export const AVAILABLE_PERMISSIONS: PermissionDefinition[] = [
     label: "Proses Transaksi Obat",
     category: "Tindakan & Aksi",
     description: "Melakukan checkout penjualan obat di kasir",
+  },
+  {
+    key: "medicine:manage",
+    label: "Kelola Stok & Data Obat",
+    category: "Tindakan & Aksi",
+    description: "Menambah, mengubah data obat, dan melakukan penyesuaian stok",
   },
   {
     key: "user:manage",

@@ -12,6 +12,7 @@ export const ROUTE_PERMISSION_MAP: Record<string, string> = {
   "/patients": "access:patients",
   "/appointments": "access:appointments",
   "/pharmacy": "access:pharmacy",
+  "/medicines": "access:medicines",
   "/doctors": "access:doctors",
   "/schedule": "access:schedule",
   "/users": "access:users",
@@ -29,6 +30,7 @@ export const DEFAULT_ROLE_ROUTE_PERMISSIONS: Record<string, string[]> = {
     "/patients",
     "/appointments",
     "/pharmacy",
+    "/medicines",
     "/doctors",
     "/schedule",
     "/users",
@@ -55,6 +57,7 @@ export const DEFAULT_ROLE_ROUTE_PERMISSIONS: Record<string, string[]> = {
   farmasi: [
     "/",
     "/pharmacy",
+    "/medicines",
     "/support",
   ],
 };
@@ -128,4 +131,9 @@ export function canRegisterPatients(role?: string | null, permissions?: string[]
 export function canProcessPharmacySales(role?: string | null, permissions?: string[] | null): boolean {
   if (role === "admin" || role === "farmasi") return true;
   return permissions?.includes("pharmacy:sell") || permissions?.includes("access:pharmacy") || false;
+}
+
+export function canManageMedicines(role?: string | null, permissions?: string[] | null): boolean {
+  if (role === "admin" || role === "farmasi") return true;
+  return permissions?.includes("medicine:manage") || permissions?.includes("access:medicines") || false;
 }

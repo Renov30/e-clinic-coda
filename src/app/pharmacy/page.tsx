@@ -1,6 +1,7 @@
 import React from "react";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
+import { isRouteAllowed } from "@/lib/auth/permissions";
 import { PharmacyPos } from "@/components/pharmacy/pharmacy-pos";
 import { pharmacyService } from "@/modules/pharmacy/service";
 import { clinicConfigService } from "@/modules/clinic-config/service";
@@ -14,7 +15,10 @@ export const metadata = {
 
 export default async function PharmacyPage() {
   const session = await getSession();
-  if (!session || (session.role !== "admin" && session.role !== "farmasi")) {
+  if (
+    !session ||
+    !isRouteAllowed(session.role, "/pharmacy", session.permissions)
+  ) {
     redirect("/");
   }
 

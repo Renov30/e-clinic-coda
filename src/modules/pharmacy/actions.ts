@@ -12,6 +12,14 @@ export async function getRecentSalesAction() {
   return await pharmacyService.getRecentSales();
 }
 
+export async function getSaleReceiptAction(notaJual: string) {
+  const receipt = await pharmacyService.getSaleReceipt(notaJual);
+  if (!receipt) {
+    return { success: false, error: "Data resi tidak ditemukan" };
+  }
+  return { success: true, data: receipt };
+}
+
 export async function processDrugSaleAction(dto: CreateSaleDTO) {
   const result = await pharmacyService.processDrugSale(dto);
   if (result.success) {

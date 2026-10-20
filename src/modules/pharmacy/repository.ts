@@ -230,6 +230,92 @@ export class PharmacyRepository {
       return [];
     }
   }
+
+  async getSaleReceipt(notaJual: string): Promise<SaleReceipt | null> {
+    try {
+      const saleRows = await query<{
+        nota_jual: string;
+        tgl_jual: string;
+        nm_pasien: string;
+        keterangan: string;
+        status: string;
+      }>(
+        `SELECT p.nota_jual, 
+                DATE_FORMAT(p.tgl_jual, '%Y-%m-%d') as tgl_jual,
+                p.nm_pasien, p.keterangan, p.status
+         FROM ${SIMKHANZA_TABLES.PENJUALAN} p
+         WHERE p.nota_jual = ? LIMIT 1`,
+        [notaJual]
+      );
+
+      if (!saleRows || saleRows.length === 0) {
+        return null;
+      }
+
+      const sale = saleRows[0];
+
+      const itemRows = await query<{
+        kode_brng: string;
+        kode_sat: string;
+        jumlah: number;
+        h_jual: number;
+        subtotal: number;
+        diskon: number;
+        total: number;
+        nama_brng: string;
+        satuan: string;
+      }>(
+        `SELECT dj.kode_brng, dj.kode_sat, dj.jumlah, dj.h_jual, dj.subtotal, dj.diskon, dj.total,
+                COALESCE(db.nama_brng, dj.kode_brng) as nama_brng,
+                COALESCE(ks.satuan, dj.kode_sat) as satuan
+         FROM ${SIMKHANZA_TABLES.DETAILJUAL} dj
+         LEFT JOIN ${SIMKHANZA_TABLES.DATABARANG} db ON dj.kode_brng = db.kode_brng
+         LEFT JOIN ${SIMKHANZA_TABLES.SATUAN} ks ON dj.kode_sat = ks.kode_sat
+         WHERE dj.nota_jual = ?`,
+        [notaJual]
+      );
+
+      const items = itemRows.map((r) => {
+        const subtotal = Number(r.subtotal);
+        const diskon = Number(r.diskon);
+        const diskonPersen =
+          subtotal > 0 ? Math.round((diskon / subtotal) * 100) : 0;
+
+        return {
+          kodeBrng: r.kode_brng,
+          namaBrng: r.nama_brng,
+          kodeSat: r.kode_sat,
+          satuan: r.satuan,
+          hargaJual: Number(r.h_jual),
+          jumlah: Number(r.jumlah),
+          diskonPersen,
+          subtotal,
+          total: Number(r.total),
+          stokTersedia: 0,
+        };
+      });
+
+      const totalTagihan = items.reduce((acc, it) => acc + it.total, 0);
+
+      return {
+        notaJual: sale.nota_jual,
+        tglJual: sale.tgl_jual,
+        jamJual: "",
+        nmPasien: sale.nm_pasien,
+        keterangan: sale.keterangan || "Penjualan Obat Luar",
+        items,
+        totalTagihan,
+        uangDiterima: totalTagihan,
+        kembalian: 0,
+      };
+    } catch (err) {
+      logger.error("Gagal mengambil resi penjualan obat", {
+        notaJual,
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return null;
+    }
+  }
 }
 
 export const pharmacyRepository = new PharmacyRepository();

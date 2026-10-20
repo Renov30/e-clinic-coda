@@ -13,6 +13,7 @@ import {
   AlertCircle,
   History,
   RotateCcw,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +35,7 @@ import {
   searchMedicinesAction,
   processDrugSaleAction,
   getRecentSalesAction,
+  getSaleReceiptAction,
 } from "@/modules/pharmacy/actions";
 import { formatCurrency } from "@/lib/utils";
 import { ClinicConfig } from "@/modules/clinic-config/types";
@@ -64,10 +66,29 @@ export function PharmacyPos({
   // Receipt Modal State
   const [currentReceipt, setCurrentReceipt] = useState<SaleReceipt | null>(null);
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
+  const [loadingReceiptNota, setLoadingReceiptNota] = useState<string | null>(null);
 
   // Status feedback
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // View receipt from history
+  const handleViewReceipt = async (notaJual: string) => {
+    setLoadingReceiptNota(notaJual);
+    try {
+      const res = await getSaleReceiptAction(notaJual);
+      if (res.success && res.data) {
+        setCurrentReceipt(res.data);
+        setIsReceiptOpen(true);
+      } else {
+        setErrorMsg(res.error || "Gagal memuat struk kuitansi.");
+      }
+    } catch {
+      setErrorMsg("Terjadi kendala saat memuat data resi.");
+    } finally {
+      setLoadingReceiptNota(null);
+    }
+  };
 
   // Search medicines
   const handleSearch = (keyword: string) => {
@@ -564,13 +585,22 @@ export function PharmacyPos({
                       <th className="py-3 px-5">Total Item</th>
                       <th className="py-3 px-5">Total Bayar</th>
                       <th className="py-3 px-5">Status</th>
+                      <th className="py-3 px-5 text-right">Aksi</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {salesHistory.map((s) => (
                       <tr key={s.notaJual} className="hover:bg-slate-50/70 transition-colors">
-                        <td className="py-3.5 px-5 font-mono font-bold text-blue-600 text-xs">
-                          {s.notaJual}
+                        <td className="py-3.5 px-5">
+                          <button
+                            type="button"
+                            onClick={() => handleViewReceipt(s.notaJual)}
+                            disabled={loadingReceiptNota === s.notaJual}
+                            className="font-mono font-bold text-blue-600 hover:text-blue-800 hover:underline text-xs text-left"
+                            title="Klik untuk melihat resi transaksi"
+                          >
+                            {s.notaJual}
+                          </button>
                         </td>
                         <td className="py-3.5 px-5 text-xs text-slate-600">{s.tglJual}</td>
                         <td className="py-3.5 px-5 font-semibold text-slate-800">{s.nmPasien}</td>
@@ -585,6 +615,23 @@ export function PharmacyPos({
                           <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                             {s.status}
                           </span>
+                        </td>
+                        <td className="py-3.5 px-5 text-right">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleViewReceipt(s.notaJual)}
+                            disabled={loadingReceiptNota === s.notaJual}
+                            className="h-8 px-2.5 rounded-lg border-slate-200 text-slate-700 hover:text-blue-700 hover:bg-blue-50 text-xs font-medium shadow-none"
+                          >
+                            {loadingReceiptNota === s.notaJual ? (
+                              <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5 text-blue-600" />
+                            ) : (
+                              <Receipt className="h-3.5 w-3.5 mr-1.5 text-blue-600" />
+                            )}
+                            <span>Lihat Resi</span>
+                          </Button>
                         </td>
                       </tr>
                     ))}

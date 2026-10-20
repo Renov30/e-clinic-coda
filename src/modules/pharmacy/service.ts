@@ -15,6 +15,10 @@ export class PharmacyService {
     return await this.repo.getRecentSales(limit);
   }
 
+  async getSaleReceipt(notaJual: string): Promise<SaleReceipt | null> {
+    return await this.repo.getSaleReceipt(notaJual);
+  }
+
   async processDrugSale(data: CreateSaleDTO): Promise<{
     success: boolean;
     data?: SaleReceipt;

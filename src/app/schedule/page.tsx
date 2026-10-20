@@ -9,8 +9,8 @@ export default function SchedulePage() {
     <div className="py-6">
       <EmptyState
         icon={<Calendar className="h-6 w-6 text-blue-600" />}
-        title="Modul Jadwal Dokter & Poliklinik"
-        description="Jadwal praktik dokter akan disinkronkan dengan data jadwal poliklinik SIMKhanza pada tahap integrasi berikutnya."
+        title="Jadwal Praktik Dokter & Poliklinik"
+        description="Kelola jadwal jam praktik dokter dan ketersediaan layanan poliklinik."
       />
     </div>
   );

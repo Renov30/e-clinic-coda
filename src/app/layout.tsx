@@ -6,7 +6,7 @@ import { clinicConfigService } from "@/modules/clinic-config/service";
 export const metadata: Metadata = {
   title: "e-clinic-coda | Sistem Informasi Klinik Terpadu",
   description:
-    "Sistem Informasi Manajemen Klinik Modular Kompatibel SIMKhanza - e-clinic-coda",
+    "Sistem Informasi Manajemen Klinik Terpadu - e-clinic-coda",
 };
 
 export default async function RootLayout({

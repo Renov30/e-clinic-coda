@@ -238,11 +238,6 @@ export function PharmacyPos({
             </span>
           </button>
         </div>
-
-        <span className="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
-          SIMKhanza: <code className="text-blue-700 font-mono">databarang</code> &{" "}
-          <code className="text-blue-700 font-mono">penjualan</code>
-        </span>
       </div>
 
       {/* Notifications */}
@@ -548,8 +543,7 @@ export function PharmacyPos({
           <CardHeader>
             <CardTitle className="text-lg">Riwayat Penjualan Obat Bebas Hari Ini</CardTitle>
             <CardDescription>
-              Transaksi tersimpan di tabel <code className="font-mono text-blue-600">penjualan</code> &{" "}
-              <code className="font-mono text-blue-600">detailjual</code> SIMKhanza.
+              Daftar rekapitulasi transaksi penjualan obat apotek hari ini.
             </CardDescription>
           </CardHeader>
           <CardContent className="p-0">

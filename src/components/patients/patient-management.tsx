@@ -253,13 +253,6 @@ export function PatientManagement({
             <span>Pasien Baru (RM)</span>
           </button>
         </div>
-
-        <div>
-          <span className="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
-            SIMKhanza: <code className="text-blue-700 font-mono">pasien</code> &{" "}
-            <code className="text-blue-700 font-mono">reg_periksa</code>
-          </span>
-        </div>
       </div>
 
       {/* Notifications */}
@@ -283,7 +276,7 @@ export function PatientManagement({
             <div>
               <CardTitle className="text-lg">Antrean & Kunjungan Rawat Jalan Hari Ini</CardTitle>
               <CardDescription>
-                Daftar antrean registrasi pasien klinik yang terhubung ke database SIMKhanza.
+                Daftar antrean dan jadwal kunjungan pasien klinik hari ini.
               </CardDescription>
             </div>
             <Button
@@ -541,8 +534,7 @@ export function PatientManagement({
             <div>
               <CardTitle className="text-lg">Database Rekam Medis Pasien</CardTitle>
               <CardDescription>
-                Daftar pasien terdaftar di klinik yang terintegrasi dengan tabel SIMKhanza{" "}
-                <code className="text-blue-600 font-mono">pasien</code>.
+                Daftar data rekam medis pasien terdaftar di klinik.
               </CardDescription>
             </div>
             <div className="flex items-center space-x-3">
@@ -632,7 +624,7 @@ export function PatientManagement({
               <div>
                 <CardTitle className="text-lg">Formulir Rekam Medis Pasien Baru</CardTitle>
                 <CardDescription>
-                  Data akan disimpan ke tabel <code className="font-mono text-blue-600">pasien</code> SIMKhanza.
+                  Lengkapi data pasien untuk pendaftaran nomor rekam medis baru.
                 </CardDescription>
               </div>
               <div className="text-right">

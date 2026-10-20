@@ -48,15 +48,12 @@ export default async function DashboardPage() {
             <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-600 text-white">
               Sistem Aktif
             </span>
-            <span className="text-xs text-slate-500 font-medium">
-              Kompatibel SIMKhanza MySQL
-            </span>
           </div>
           <h2 className="text-xl font-bold text-slate-800 mt-2">
             {clinicConfig.namaKlinik}
           </h2>
           <p className="text-sm text-slate-600 mt-0.5">
-            Sistem informasi manajemen klinik terpadu e-clinic-coda.
+            Sistem informasi manajemen operasional klinik terpadu.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -89,7 +86,7 @@ export default async function DashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold text-slate-800">{visitsToday.length} Pasien</div>
             <p className="text-xs text-blue-600 mt-1 font-medium">
-              Terdaftar di reg_periksa hari ini
+              Kunjungan terdaftar hari ini
             </p>
           </CardContent>
         </Card>
@@ -106,7 +103,7 @@ export default async function DashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold text-slate-800">{patients.length} Pasien</div>
             <p className="text-xs text-slate-500 mt-1">
-              Data tabel SIMKhanza pasien
+              Total rekam medis terdaftar
             </p>
           </CardContent>
         </Card>
@@ -131,7 +128,7 @@ export default async function DashboardPage() {
         <Card className="rounded-2xl border-slate-200/80 shadow-xs hover:border-slate-300 transition-all">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-slate-500">
-              Koneksi Database
+              Koneksi Server Data
             </CardTitle>
             <div
               className={`h-9 w-9 rounded-xl flex items-center justify-center ${
@@ -149,20 +146,20 @@ export default async function DashboardPage() {
                 <>
                   <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                   <span className="text-sm font-bold text-emerald-700">
-                    MySQL Terhubung
+                    Sistem Terhubung
                   </span>
                 </>
               ) : (
                 <>
                   <AlertTriangle className="h-4 w-4 text-amber-600" />
                   <span className="text-sm font-bold text-amber-700">
-                    Siap (Docker Dev)
+                    Siap Digunakan
                   </span>
                 </>
               )}
             </div>
             <p className="text-xs text-slate-500 mt-1 truncate">
-              {dbHealth.message}
+              {dbHealth.connected ? "Layanan data siap dan aktif" : "Mode mandiri aktif"}
             </p>
           </CardContent>
         </Card>
@@ -178,7 +175,7 @@ export default async function DashboardPage() {
                 Pendaftaran Rawat Jalan Terkini
               </CardTitle>
               <p className="text-xs text-slate-500 mt-0.5">
-                Kunjungan pasien terbaru dari tabel reg_periksa
+                Kunjungan dan antrean pasien rawat jalan hari ini
               </p>
             </div>
             <Link href="/patients">

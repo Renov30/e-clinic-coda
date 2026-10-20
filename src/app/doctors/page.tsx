@@ -9,8 +9,8 @@ export default function DoctorsPage() {
     <div className="py-6">
       <EmptyState
         icon={<Stethoscope className="h-6 w-6 text-blue-600" />}
-        title="Modul Dokter & Tenaga Medis"
-        description="Daftar dokter, SIP, spesialisasi, dan hak akses tindakan klinik disiapkan sesuai pemetaan tabel 'dokter' SIMKhanza."
+        title="Daftar Dokter & Tenaga Medis"
+        description="Kelola informasi dokter, nomor SIP, spesialisasi, dan poliklinik tugas."
       />
     </div>
   );

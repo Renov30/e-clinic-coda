@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Registrasi Pasien & Kunjungan | e-clinic-coda",
-  description: "Manajemen data rekam medis pasien dan pendaftaran rawat jalan SIMKhanza",
+  description: "Manajemen data rekam medis pasien dan pendaftaran rawat jalan",
 };
 
 export default async function PatientsPage() {

@@ -9,7 +9,7 @@ export interface NavigationItem {
 export const APP_CONFIG = {
   name: "e-clinic-coda",
   version: "0.1.0",
-  description: "Sistem Informasi Manajemen Klinik Modular Kompatibel SIMKhanza",
+  description: "Sistem Informasi Manajemen Klinik Terpadu",
   mainNav: [
     {
       name: "Dashboard",

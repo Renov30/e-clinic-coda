@@ -276,11 +276,11 @@ export function RoleManagement({ initialRoles }: RoleManagementProps) {
                   </td>
 
                   <td className="py-4 px-5 text-right">
-                    <div className="flex items-center justify-end space-x-3 text-xs">
+                    <div className="flex items-center justify-end space-x-2 text-xs">
                       <button
                         type="button"
                         onClick={() => openEditModal(role)}
-                        className="font-medium text-slate-500 hover:text-blue-700 hover:underline"
+                        className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 transition-colors shadow-2xs"
                       >
                         Ubah Wewenang
                       </button>
@@ -290,10 +290,10 @@ export function RoleManagement({ initialRoles }: RoleManagementProps) {
                           type="button"
                           onClick={() => handleDeleteRole(role)}
                           disabled={role.userCount > 0}
-                          className={`font-medium ${
+                          className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors shadow-2xs ${
                             role.userCount > 0
-                              ? "text-slate-300 cursor-not-allowed"
-                              : "text-slate-500 hover:text-rose-600 hover:underline"
+                              ? "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed opacity-60 font-medium shadow-none"
+                              : "bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200"
                           }`}
                           title={
                             role.userCount > 0

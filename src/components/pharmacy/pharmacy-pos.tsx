@@ -373,8 +373,9 @@ export function PharmacyPos({
                   </div>
                   {cart.length > 0 && (
                     <button
+                      type="button"
                       onClick={() => setCart([])}
-                      className="text-xs text-rose-600 hover:underline flex items-center space-x-1"
+                      className="px-2.5 py-1 rounded-lg text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 hover:bg-rose-100 transition-colors shadow-2xs flex items-center space-x-1"
                     >
                       <RotateCcw className="h-3 w-3" />
                       <span>Kosongkan</span>
@@ -465,7 +466,8 @@ export function PharmacyPos({
                           <button
                             type="button"
                             onClick={() => removeFromCart(item.kodeBrng)}
-                            className="ml-2 text-slate-400 hover:text-rose-600"
+                            className="ml-2 p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-colors"
+                            title="Hapus dari keranjang"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
@@ -623,7 +625,7 @@ export function PharmacyPos({
                             size="sm"
                             onClick={() => handleViewReceipt(s.notaJual)}
                             disabled={loadingReceiptNota === s.notaJual}
-                            className="h-8 px-2.5 rounded-lg border-slate-200 text-slate-700 hover:text-blue-700 hover:bg-blue-50 text-xs font-medium shadow-none"
+                            className="h-8 px-3 rounded-lg border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800 text-xs font-semibold shadow-2xs transition-colors"
                           >
                             {loadingReceiptNota === s.notaJual ? (
                               <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5 text-blue-600" />

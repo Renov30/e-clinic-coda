@@ -602,7 +602,7 @@ export function PatientManagement({
                             setSelectedPatient(p);
                             setActiveTab("register_visit");
                           }}
-                          className="h-8 rounded-lg text-xs hover:bg-blue-50 hover:text-blue-600"
+                          className="h-8 px-3 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 hover:text-blue-800 transition-colors shadow-2xs"
                         >
                           Daftar Kunjungan
                         </Button>

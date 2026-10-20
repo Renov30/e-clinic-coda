@@ -179,7 +179,7 @@ export default async function DashboardPage() {
               </p>
             </div>
             <Link href="/patients">
-              <Button variant="outline" size="sm" className="rounded-xl text-xs">
+              <Button variant="outline" size="sm" className="rounded-xl text-xs font-semibold bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 hover:text-blue-800 shadow-2xs">
                 Buka Registrasi
               </Button>
             </Link>
@@ -261,7 +261,7 @@ export default async function DashboardPage() {
               </div>
               <div className="pt-2">
                 <Link href="/settings">
-                  <Button variant="outline" size="sm" className="w-full rounded-xl text-xs">
+                  <Button variant="outline" size="sm" className="w-full rounded-xl text-xs font-semibold bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 hover:text-blue-800 shadow-2xs">
                     Ubah Pengaturan Instansi
                   </Button>
                 </Link>

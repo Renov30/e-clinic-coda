@@ -3,12 +3,11 @@ import { LoadingState } from "@/components/common/loading-state";
 
 export default function Loading() {
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-[#f1f3f6]">
+    <div className="flex min-h-[400px] w-full items-center justify-center">
       <LoadingState
-        message="Memuat e-clinic-coda..."
+        message="Memuat modul..."
         description="Menyiapkan data antarmuka klinik..."
       />
     </div>
   );
 }
-

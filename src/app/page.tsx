@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/common/status-badge";
@@ -32,12 +31,8 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <AppShell
-      clinicName={clinicConfig.namaKlinik || "Smile360"}
-      pageTitle="Dashboard"
-    >
-      <div className="space-y-8">
-        {/* Top welcome banner */}
+    <div className="space-y-8">
+      {/* Top welcome banner */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-slate-50 border border-blue-100/60">
           <div>
             <div className="flex items-center space-x-2">
@@ -310,6 +305,5 @@ export default async function DashboardPage() {
           </div>
         </div>
       </div>
-    </AppShell>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+import { usePathname } from "next/navigation";
 import { Search, Sun, Moon, Bell, ChevronDown, User, ShieldCheck } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -18,12 +19,30 @@ interface HeaderProps {
   doctorName?: string;
 }
 
+const ROUTE_TITLES: Record<string, string> = {
+  "/": "Dashboard",
+  "/appointments": "Appointments",
+  "/schedule": "Schedule",
+  "/patients": "Patients",
+  "/doctors": "Doctors",
+  "/messages": "Messages",
+  "/payments": "Payments",
+  "/settings": "Settings",
+  "/support": "Support",
+};
+
 export function Header({
-  title = "Appointments",
+  title,
   doctorName = "Dr. Shin Tamura",
 }: HeaderProps) {
+  const pathname = usePathname();
   const [isDark, setIsDark] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+
+  const pageTitle = useMemo(() => {
+    if (title) return title;
+    return ROUTE_TITLES[pathname] || "e-clinic-coda";
+  }, [title, pathname]);
 
   const toggleTheme = () => {
     setIsDark(!isDark);
@@ -33,8 +52,8 @@ export function Header({
     <header className="flex h-20 items-center justify-between px-8 border-b border-slate-100 bg-white shrink-0">
       {/* Title */}
       <div className="flex items-center min-w-[200px]">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-800">
-          {title}
+        <h1 className="text-2xl font-bold tracking-tight text-slate-800 transition-colors">
+          {pageTitle}
         </h1>
       </div>
 

@@ -5,6 +5,7 @@ import { createSessionToken, setSessionCookie, deleteSessionCookie, getSession }
 import { loginSchema, createUserSchema, updateUserSchema, resetPasswordSchema } from "@/lib/validations/auth";
 import { recordAuditEvent } from "@/lib/audit";
 import { logger } from "@/lib/logger";
+import { query } from "@/lib/db";
 
 export class UserService {
   constructor(private repo: UserRepository = userRepository) {}
@@ -37,12 +38,28 @@ export class UserService {
         return { success: false, error: "Username atau password salah." };
       }
 
+      // Ambil daftar permissions untuk role pengguna
+      let permissions: string[] = [];
+      try {
+        const permRows = await query<{ permission_key: string }>(
+          `SELECT rp.permission_key 
+           FROM coda_role_permissions rp 
+           JOIN coda_roles r ON rp.role_id = r.id 
+           WHERE r.name = ?`,
+          [user.role]
+        );
+        permissions = permRows.map((p) => p.permission_key);
+      } catch {
+        // Abaikan jika query gagal
+      }
+
       // Generate session token & simpan di httpOnly cookie
       const token = await createSessionToken({
         userId: user.id,
         username: user.username,
         namaLengkap: user.namaLengkap,
         role: user.role,
+        permissions,
       });
 
       await setSessionCookie(token);

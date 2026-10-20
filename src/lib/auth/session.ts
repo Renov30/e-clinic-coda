@@ -5,7 +5,8 @@ export interface UserSessionPayload {
   userId: string;
   username: string;
   namaLengkap: string;
-  role: "admin" | "dokter" | "pendaftaran" | "farmasi";
+  role: string;
+  permissions?: string[];
 }
 
 export const SESSION_COOKIE_NAME = "coda_session";
@@ -28,7 +29,10 @@ export async function verifySessionToken(token: string): Promise<UserSessionPayl
       userId: payload.userId as string,
       username: payload.username as string,
       namaLengkap: payload.namaLengkap as string,
-      role: payload.role as "admin" | "dokter" | "pendaftaran" | "farmasi",
+      role: (payload.role as string) || "admin",
+      permissions: Array.isArray(payload.permissions)
+        ? (payload.permissions as string[])
+        : undefined,
     };
   } catch {
     return null;
@@ -57,4 +61,3 @@ export async function deleteSessionCookie(): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.delete(SESSION_COOKIE_NAME);
 }
-

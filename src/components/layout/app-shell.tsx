@@ -33,6 +33,7 @@ export function AppShell({
       <Sidebar
         clinicName={clinicName}
         initialCollapsed={initialSidebarCollapsed}
+        currentUser={currentUser}
       />
 
       {/* Right Main Content Area */}

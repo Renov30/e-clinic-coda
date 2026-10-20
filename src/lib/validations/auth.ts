@@ -19,9 +19,7 @@ export const createUserSchema = z.object({
     .max(100, "Nama lengkap maksimal 100 karakter"),
   email: z.string().email("Format email tidak valid").optional().or(z.literal("")),
   password: z.string().min(6, "Password minimal 6 karakter"),
-  role: z.enum(["admin", "dokter", "pendaftaran", "farmasi"], {
-    message: "Pilih peran pengguna yang valid",
-  }),
+  role: z.string().min(2, "Pilih peran pengguna yang valid"),
 });
 
 export type CreateUserFormValues = z.infer<typeof createUserSchema>;
@@ -32,7 +30,7 @@ export const updateUserSchema = z.object({
     .min(3, "Nama lengkap minimal 3 karakter")
     .max(100, "Nama lengkap maksimal 100 karakter"),
   email: z.string().email("Format email tidak valid").optional().or(z.literal("")),
-  role: z.enum(["admin", "dokter", "pendaftaran", "farmasi"]),
+  role: z.string().min(2, "Pilih peran pengguna yang valid"),
   status: z.enum(["aktif", "nonaktif"]),
 });
 

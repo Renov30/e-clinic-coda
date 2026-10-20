@@ -35,6 +35,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { UserSessionPayload } from "@/lib/auth/session";
 import { logoutAction } from "@/modules/users/actions";
+import { canManageUsers, canManageSettings } from "@/lib/auth/permissions";
 
 interface HeaderProps {
   title?: string;
@@ -49,7 +50,8 @@ const ROUTE_TITLES: Record<string, string> = {
   "/pharmacy": "Penjualan Obat Luar",
   "/schedule": "Jadwal Praktik Dokter",
   "/doctors": "Dokter & Poliklinik",
-  "/users": "Manajemen Pengguna & Hak Akses",
+  "/users": "Manajemen Pengguna",
+  "/roles": "Hak Akses & Manajemen Peran",
   "/settings": "Pengaturan Instansi",
   "/support": "Bantuan & Sistem",
 };
@@ -180,18 +182,22 @@ export function Header({
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/users" className="flex items-center cursor-pointer">
-                  <UserCog className="mr-2 h-4 w-4 text-slate-500" />
-                  <span>Manajemen Pengguna</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/settings" className="flex items-center cursor-pointer">
-                  <User className="mr-2 h-4 w-4 text-slate-500" />
-                  <span>Pengaturan Profil</span>
-                </Link>
-              </DropdownMenuItem>
+              {canManageUsers(currentUser?.role) && (
+                <DropdownMenuItem asChild>
+                  <Link href="/users" className="flex items-center cursor-pointer">
+                    <UserCog className="mr-2 h-4 w-4 text-slate-500" />
+                    <span>Manajemen Pengguna</span>
+                  </Link>
+                </DropdownMenuItem>
+              )}
+              {canManageSettings(currentUser?.role) && (
+                <DropdownMenuItem asChild>
+                  <Link href="/settings" className="flex items-center cursor-pointer">
+                    <User className="mr-2 h-4 w-4 text-slate-500" />
+                    <span>Pengaturan Instansi</span>
+                  </Link>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem asChild>
                 <Link href="/api/health" target="_blank" className="flex items-center cursor-pointer">
                   <ShieldCheck className="mr-2 h-4 w-4 text-slate-500" />

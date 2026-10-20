@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -18,10 +18,13 @@ import {
   PanelLeftOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { UserSessionPayload } from "@/lib/auth/session";
+import { isRouteAllowed } from "@/lib/auth/permissions";
 
 interface SidebarProps {
   clinicName?: string;
   initialCollapsed?: boolean;
+  currentUser?: UserSessionPayload | null;
 }
 
 const NAV_ITEMS = [
@@ -44,6 +47,7 @@ const STORAGE_KEY = "coda_sidebar_collapsed";
 export function Sidebar({
   clinicName = "Smile360",
   initialCollapsed = false,
+  currentUser,
 }: SidebarProps) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(initialCollapsed);
@@ -71,6 +75,20 @@ export function Sidebar({
       return next;
     });
   };
+
+  // Filter navigasi berdasarkan hak akses peran pengguna
+  const userRole = currentUser?.role;
+  const userPermissions = currentUser?.permissions;
+
+  const visibleNavItems = useMemo(() => {
+    if (!userRole) return NAV_ITEMS;
+    return NAV_ITEMS.filter((item) => isRouteAllowed(userRole, item.href, userPermissions));
+  }, [userRole, userPermissions]);
+
+  const visibleBottomItems = useMemo(() => {
+    if (!userRole) return BOTTOM_ITEMS;
+    return BOTTOM_ITEMS.filter((item) => isRouteAllowed(userRole, item.href, userPermissions));
+  }, [userRole, userPermissions]);
 
   return (
     <aside
@@ -118,7 +136,7 @@ export function Sidebar({
 
       {/* Main Navigation */}
       <nav className="flex-1 space-y-1.5 w-full">
-        {NAV_ITEMS.map((item) => {
+        {visibleNavItems.map((item) => {
           const Icon = item.icon;
           const isActive =
             pathname === item.href ||
@@ -153,7 +171,7 @@ export function Sidebar({
 
       {/* Bottom Section */}
       <div className="pt-4 mt-auto border-t border-slate-100 space-y-1.5 w-full">
-        {BOTTOM_ITEMS.map((item) => {
+        {visibleBottomItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
 

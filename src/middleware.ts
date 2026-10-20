@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
+import { isRouteAllowed } from "@/lib/auth/permissions";
 
 const SESSION_COOKIE_NAME = "coda_session";
 const SESSION_SECRET_KEY = new TextEncoder().encode(
@@ -22,26 +23,41 @@ export async function middleware(request: NextRequest) {
 
   const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
   let isAuthenticated = false;
+  let userRole: string | null = null;
+  let userPermissions: string[] | null = null;
 
   if (token) {
     try {
-      await jwtVerify(token, SESSION_SECRET_KEY);
+      const { payload } = await jwtVerify(token, SESSION_SECRET_KEY);
       isAuthenticated = true;
+      userRole = (payload.role as string) || null;
+      userPermissions = Array.isArray(payload.permissions)
+        ? (payload.permissions as string[])
+        : null;
     } catch {
       isAuthenticated = false;
     }
   }
 
-  // Jika belum login dan mengakses halaman selain /login -> redirect ke /login
+  // 1. Jika belum login dan mengakses halaman selain /login -> redirect ke /login
   if (!isAuthenticated && pathname !== "/login") {
     const loginUrl = new URL("/login", request.url);
     return NextResponse.redirect(loginUrl);
   }
 
-  // Jika sudah login dan mencoba mengakses /login -> redirect ke dashboard /
+  // 2. Jika sudah login dan mencoba mengakses /login -> redirect ke dashboard /
   if (isAuthenticated && pathname === "/login") {
     const dashboardUrl = new URL("/", request.url);
     return NextResponse.redirect(dashboardUrl);
+  }
+
+  // 3. Proteksi Hak Akses (Role & Permission Based Route Guard)
+  if (isAuthenticated && userRole && pathname !== "/login") {
+    if (!isRouteAllowed(userRole, pathname, userPermissions)) {
+      // Jika peran tidak memiliki izin untuk halaman ini, redirect ke dashboard
+      const dashboardUrl = new URL("/", request.url);
+      return NextResponse.redirect(dashboardUrl);
+    }
   }
 
   return NextResponse.next();
@@ -58,4 +74,3 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico).*)",
   ],
 };
-

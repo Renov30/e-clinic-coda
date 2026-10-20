@@ -1,4 +1,6 @@
 import React from "react";
+import { redirect } from "next/navigation";
+import { getSession } from "@/lib/auth/session";
 import { PatientManagement } from "@/components/patients/patient-management";
 import { patientRegistrationService } from "@/modules/patient-registration/service";
 
@@ -10,6 +12,11 @@ export const metadata = {
 };
 
 export default async function PatientsPage() {
+  const session = await getSession();
+  if (!session || session.role === "farmasi") {
+    redirect("/");
+  }
+
   const [patients, visits, masterData] = await Promise.all([
     patientRegistrationService.searchPatients("", 50),
     patientRegistrationService.getVisitsToday(),

@@ -1,4 +1,4 @@
-export type UserRole = "admin" | "dokter" | "pendaftaran" | "farmasi";
+export type UserRole = string;
 export type UserStatus = "aktif" | "nonaktif";
 
 export interface User {

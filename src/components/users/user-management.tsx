@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useTransition, useMemo } from "react";
+import Link from "next/link";
 import { Search, Loader2, ChevronDown } from "lucide-react";
 import { User, UserRole, UserStatus } from "@/modules/users/types";
+import { RoleWithPermissions } from "@/modules/roles/types";
 import {
   createUserAction,
   updateUserAction,
@@ -24,11 +26,12 @@ import {
 
 interface UserManagementProps {
   initialUsers: User[];
+  availableRoles?: RoleWithPermissions[];
   currentUserId?: string;
 }
 
 const ROLE_CONFIG: Record<
-  UserRole,
+  string,
   { label: string; badgeVariant: "default" | "secondary" | "success" | "warning" }
 > = {
   admin: {
@@ -51,6 +54,7 @@ const ROLE_CONFIG: Record<
 
 export function UserManagement({
   initialUsers,
+  availableRoles = [],
   currentUserId,
 }: UserManagementProps) {
   const [users, setUsers] = useState<User[]>(initialUsers);
@@ -70,7 +74,7 @@ export function UserManagement({
     username: "",
     namaLengkap: "",
     password: "",
-    role: "pendaftaran" as UserRole,
+    role: (availableRoles[0]?.name as UserRole) || "pendaftaran",
   });
 
   const [editingUser, setEditingUser] = useState<User | null>(null);
@@ -132,7 +136,7 @@ export function UserManagement({
           username: "",
           namaLengkap: "",
           password: "",
-          role: "pendaftaran",
+          role: (availableRoles[0]?.name as UserRole) || "pendaftaran",
         });
         showNotification("success", `Pengguna "${res.data.namaLengkap}" berhasil ditambahkan.`);
       } else {
@@ -234,6 +238,22 @@ export function UserManagement({
 
   return (
     <div className="space-y-5">
+      {/* Tab Switcher Sub-Navigation */}
+      <div className="flex border-b border-slate-200">
+        <Link
+          href="/users"
+          className="px-4 py-2.5 text-sm font-semibold text-blue-600 border-b-2 border-blue-600 transition-colors"
+        >
+          Daftar Pengguna
+        </Link>
+        <Link
+          href="/roles"
+          className="px-4 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-800 border-b-2 border-transparent hover:border-slate-300 transition-colors"
+        >
+          Peran & Hak Akses
+        </Link>
+      </div>
+
       {/* Top Banner / Notification */}
       {notification && (
         <div
@@ -302,10 +322,20 @@ export function UserManagement({
                 className="h-10 pl-3 pr-8 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600 appearance-none cursor-pointer"
               >
                 <option value="all">Semua Peran</option>
-                <option value="admin">Administrator</option>
-                <option value="dokter">Dokter</option>
-                <option value="pendaftaran">Petugas Pendaftaran</option>
-                <option value="farmasi">Staf Farmasi</option>
+                {availableRoles.length > 0 ? (
+                  availableRoles.map((r) => (
+                    <option key={r.id} value={r.name}>
+                      {r.label}
+                    </option>
+                  ))
+                ) : (
+                  <>
+                    <option value="admin">Administrator</option>
+                    <option value="dokter">Dokter</option>
+                    <option value="pendaftaran">Petugas Pendaftaran</option>
+                    <option value="farmasi">Staf Farmasi</option>
+                  </>
+                )}
               </select>
               <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
             </div>
@@ -358,10 +388,13 @@ export function UserManagement({
                 </tr>
               ) : (
                 filteredUsers.map((u) => {
-                  const roleMeta = ROLE_CONFIG[u.role] || {
-                    label: u.role,
-                    badgeVariant: "secondary",
-                  };
+                  const roleLabel =
+                    availableRoles.find((r) => r.name === u.role)?.label ||
+                    ROLE_CONFIG[u.role]?.label ||
+                    u.role;
+                  const roleVariant =
+                    ROLE_CONFIG[u.role]?.badgeVariant || "secondary";
+
                   const isCurrentAccount = currentUserId === u.id;
                   const isActive = u.status === "aktif";
 
@@ -402,10 +435,10 @@ export function UserManagement({
 
                       <td className="py-4 px-5">
                         <Badge
-                          variant={roleMeta.badgeVariant}
+                          variant={roleVariant}
                           className="px-2.5 py-0.5 font-medium text-xs"
                         >
-                          {roleMeta.label}
+                          {roleLabel}
                         </Badge>
                       </td>
 
@@ -550,15 +583,25 @@ export function UserManagement({
                     onChange={(e) =>
                       setCreateForm({
                         ...createForm,
-                        role: e.target.value as UserRole,
+                        role: e.target.value,
                       })
                     }
                     className="w-full h-10 pl-3 pr-9 rounded-xl border border-slate-200 text-sm bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 appearance-none cursor-pointer"
                   >
-                    <option value="pendaftaran">Petugas Pendaftaran & Kasir</option>
-                    <option value="dokter">Dokter / Tenaga Medis</option>
-                    <option value="farmasi">Staf Farmasi / Apotek</option>
-                    <option value="admin">Administrator Sistem</option>
+                    {availableRoles.length > 0 ? (
+                      availableRoles.map((r) => (
+                        <option key={r.id} value={r.name}>
+                          {r.label}
+                        </option>
+                      ))
+                    ) : (
+                      <>
+                        <option value="pendaftaran">Petugas Pendaftaran & Kasir</option>
+                        <option value="dokter">Dokter / Tenaga Medis</option>
+                        <option value="farmasi">Staf Farmasi / Apotek</option>
+                        <option value="admin">Administrator Sistem</option>
+                      </>
+                    )}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                 </div>
@@ -631,15 +674,25 @@ export function UserManagement({
                     onChange={(e) =>
                       setEditForm({
                         ...editForm,
-                        role: e.target.value as UserRole,
+                        role: e.target.value,
                       })
                     }
                     className="w-full h-10 pl-3 pr-9 rounded-xl border border-slate-200 text-sm bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 appearance-none cursor-pointer"
                   >
-                    <option value="pendaftaran">Petugas Pendaftaran & Kasir</option>
-                    <option value="dokter">Dokter / Tenaga Medis</option>
-                    <option value="farmasi">Staf Farmasi / Apotek</option>
-                    <option value="admin">Administrator Sistem</option>
+                    {availableRoles.length > 0 ? (
+                      availableRoles.map((r) => (
+                        <option key={r.id} value={r.name}>
+                          {r.label}
+                        </option>
+                      ))
+                    ) : (
+                      <>
+                        <option value="pendaftaran">Petugas Pendaftaran & Kasir</option>
+                        <option value="dokter">Dokter / Tenaga Medis</option>
+                        <option value="farmasi">Staf Farmasi / Apotek</option>
+                        <option value="admin">Administrator Sistem</option>
+                      </>
+                    )}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                 </div>

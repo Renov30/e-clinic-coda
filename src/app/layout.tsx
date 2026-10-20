@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import "./globals.css";
 import { AppShell } from "@/components/layout/app-shell";
 import { clinicConfigService } from "@/modules/clinic-config/service";
@@ -15,10 +16,14 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [clinicConfig, session] = await Promise.all([
+  const [clinicConfig, session, cookieStore] = await Promise.all([
     clinicConfigService.getClinicProfile(),
     getSession(),
+    cookies(),
   ]);
+
+  const isSidebarCollapsed =
+    cookieStore.get("coda_sidebar_collapsed")?.value === "true";
 
   return (
     <html lang="id" className="h-full">
@@ -26,6 +31,7 @@ export default async function RootLayout({
         <AppShell
           clinicName={clinicConfig.namaKlinik || "Smile360"}
           currentUser={session}
+          initialSidebarCollapsed={isSidebarCollapsed}
         >
           {children}
         </AppShell>

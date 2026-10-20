@@ -11,6 +11,7 @@ export interface MedicineItem {
 export interface CartItem {
   kodeBrng: string;
   namaBrng: string;
+  kodeSat?: string;
   satuan: string;
   hargaJual: number;
   jumlah: number;

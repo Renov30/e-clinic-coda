@@ -136,6 +136,24 @@ export class PharmacyRepository {
         const total = item.total;
         const diskonRp = subtotal - total;
 
+        // Pastikan kode_sat valid dan tidak melebihi char(4) sesuai schema SIMKhanza
+        let kodeSat = (item.kodeSat || "").trim();
+        if (!kodeSat || kodeSat.length > 4) {
+          const [barangRows] = (await conn.execute(
+            `SELECT kode_sat FROM ${SIMKHANZA_TABLES.DATABARANG} WHERE kode_brng = ? LIMIT 1`,
+            [item.kodeBrng]
+          )) as [Array<{ kode_sat?: string }>, unknown];
+
+          if (barangRows && barangRows.length > 0 && barangRows[0].kode_sat) {
+            kodeSat = barangRows[0].kode_sat;
+          } else if (item.satuan) {
+            kodeSat = item.satuan.slice(0, 4).toUpperCase();
+          } else {
+            kodeSat = "PCS";
+          }
+        }
+        kodeSat = kodeSat.slice(0, 4);
+
         await conn.execute(
           `INSERT INTO ${SIMKHANZA_TABLES.DETAILJUAL} 
            (nota_jual, kode_brng, kode_sat, jumlah, h_jual, subtotal, diskon, total)
@@ -143,7 +161,7 @@ export class PharmacyRepository {
           [
             notaJual,
             item.kodeBrng,
-            item.satuan,
+            kodeSat,
             item.jumlah,
             item.hargaJual,
             subtotal,

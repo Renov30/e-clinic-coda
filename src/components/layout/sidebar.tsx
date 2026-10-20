@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -13,13 +13,15 @@ import {
   UserCog,
   Settings,
   HelpCircle,
-  Menu,
   HeartPulse,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SidebarProps {
   clinicName?: string;
+  initialCollapsed?: boolean;
 }
 
 const NAV_ITEMS = [
@@ -37,9 +39,38 @@ const BOTTOM_ITEMS = [
   { name: "Support", href: "/support", icon: HelpCircle },
 ];
 
-export function Sidebar({ clinicName = "Smile360" }: SidebarProps) {
+const STORAGE_KEY = "coda_sidebar_collapsed";
+
+export function Sidebar({
+  clinicName = "Smile360",
+  initialCollapsed = false,
+}: SidebarProps) {
   const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(initialCollapsed);
+
+  // Sinkronisasi perubahan across tabs jika ada
+  useEffect(() => {
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY && e.newValue !== null) {
+        setCollapsed(e.newValue === "true");
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
+  const toggleSidebar = () => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(STORAGE_KEY, String(next));
+        document.cookie = `${STORAGE_KEY}=${next}; path=/; max-age=31536000; SameSite=Lax`;
+      } catch {
+        // Abaikan jika ada pembatasan cookie/storage pada lingkungan tertentu
+      }
+      return next;
+    });
+  };
 
   return (
     <aside
@@ -51,11 +82,11 @@ export function Sidebar({ clinicName = "Smile360" }: SidebarProps) {
       {/* Brand Header */}
       <div
         className={cn(
-          "flex items-center mb-8 px-2",
-          collapsed ? "justify-center" : "justify-between"
+          "flex items-center mb-8 px-1 transition-all",
+          collapsed ? "flex-col gap-3 justify-center" : "justify-between"
         )}
       >
-        <Link href="/" className="flex items-center space-x-3 group">
+        <Link href="/" className="flex items-center space-x-3 group" title={clinicName}>
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm transition-transform group-hover:scale-105">
             <HeartPulse className="h-6 w-6 stroke-[2.2]" />
           </div>
@@ -70,21 +101,23 @@ export function Sidebar({ clinicName = "Smile360" }: SidebarProps) {
             </div>
           )}
         </Link>
+
         <button
-          onClick={() => setCollapsed(!collapsed)}
-          className={cn(
-            "p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors",
-            collapsed && "hidden"
-          )}
+          onClick={toggleSidebar}
+          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
           title={collapsed ? "Perluas Sidebar" : "Ciutkan Sidebar"}
-          aria-label="Toggle Sidebar"
+          aria-label={collapsed ? "Perluas Sidebar" : "Ciutkan Sidebar"}
         >
-          <Menu className="h-5 w-5" />
+          {collapsed ? (
+            <PanelLeftOpen className="h-5 w-5" />
+          ) : (
+            <PanelLeftClose className="h-5 w-5" />
+          )}
         </button>
       </div>
 
       {/* Main Navigation */}
-      <nav className="flex-1 space-y-1.5">
+      <nav className="flex-1 space-y-1.5 w-full">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive =
@@ -119,7 +152,7 @@ export function Sidebar({ clinicName = "Smile360" }: SidebarProps) {
       </nav>
 
       {/* Bottom Section */}
-      <div className="pt-4 mt-auto border-t border-slate-100 space-y-1.5">
+      <div className="pt-4 mt-auto border-t border-slate-100 space-y-1.5 w-full">
         {BOTTOM_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;

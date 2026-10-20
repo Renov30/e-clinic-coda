@@ -11,6 +11,7 @@ interface AppShellProps {
   clinicName?: string;
   pageTitle?: string;
   currentUser?: UserSessionPayload | null;
+  initialSidebarCollapsed?: boolean;
 }
 
 export function AppShell({
@@ -18,6 +19,7 @@ export function AppShell({
   clinicName = "Smile360",
   pageTitle,
   currentUser,
+  initialSidebarCollapsed = false,
 }: AppShellProps) {
   const pathname = usePathname();
 
@@ -28,7 +30,10 @@ export function AppShell({
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-white">
       {/* Left Sidebar */}
-      <Sidebar clinicName={clinicName} />
+      <Sidebar
+        clinicName={clinicName}
+        initialCollapsed={initialSidebarCollapsed}
+      />
 
       {/* Right Main Content Area */}
       <div className="flex flex-1 flex-col overflow-hidden bg-white min-w-0">

@@ -106,6 +106,7 @@ export function PharmacyPos({
         const newItem: CartItem = {
           kodeBrng: med.kodeBrng,
           namaBrng: med.namaBrng,
+          kodeSat: med.kodeSat,
           satuan: med.satuan,
           hargaJual: med.hargaJual,
           jumlah: 1,

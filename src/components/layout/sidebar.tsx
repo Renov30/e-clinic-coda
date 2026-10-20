@@ -46,7 +46,7 @@ export function Sidebar({ clinicName = "Smile360" }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "flex flex-col border-r border-slate-100 bg-white transition-all duration-300 select-none py-6 px-4 shrink-0",
+        "flex flex-col border-r border-slate-200/80 bg-white transition-all duration-300 select-none py-6 px-4 shrink-0",
         collapsed ? "w-20 items-center" : "w-64"
       )}
     >

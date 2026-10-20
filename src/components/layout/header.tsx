@@ -49,7 +49,7 @@ export function Header({
   };
 
   return (
-    <header className="flex h-20 items-center justify-between px-8 border-b border-slate-100 bg-white shrink-0">
+    <header className="flex h-20 items-center justify-between px-8 border-b border-slate-200/80 bg-white shrink-0">
       {/* Title */}
       <div className="flex items-center min-w-[200px]">
         <h1 className="text-2xl font-bold tracking-tight text-slate-800 transition-colors">

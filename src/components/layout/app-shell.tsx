@@ -16,21 +16,19 @@ export function AppShell({
   pageTitle,
 }: AppShellProps) {
   return (
-    <div className="flex h-screen w-full bg-[#f1f3f6] p-4 lg:p-6 overflow-hidden">
-      {/* Outer rounded card container (matching design reference) */}
-      <div className="flex h-full w-full overflow-hidden rounded-3xl bg-white shadow-sm border border-slate-200/80">
-        {/* Left Sidebar */}
-        <Sidebar clinicName={clinicName} />
+    <div className="flex h-screen w-screen overflow-hidden bg-white">
+      {/* Left Sidebar */}
+      <Sidebar clinicName={clinicName} />
 
-        {/* Right Main Content Area */}
-        <div className="flex flex-1 flex-col overflow-hidden bg-white">
-          <Header title={pageTitle} />
-          <main className="flex-1 overflow-y-auto bg-white p-6 lg:p-8">
+      {/* Right Main Content Area */}
+      <div className="flex flex-1 flex-col overflow-hidden bg-white min-w-0">
+        <Header title={pageTitle} />
+        <main className="flex-1 overflow-y-auto bg-slate-50/50 p-6 lg:p-8">
+          <div className="mx-auto w-full max-w-7xl">
             {children}
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
     </div>
   );
 }
-

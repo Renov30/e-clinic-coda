@@ -198,16 +198,16 @@ export function PatientManagement({
               setErrorMsg(null);
               setSuccessMsg(null);
             }}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
               activeTab === "visits_today"
-                ? "bg-blue-600 text-white shadow-xs font-semibold"
+                ? "bg-blue-600 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             }`}
           >
             <ClipboardList className="h-4 w-4" />
             <span>Kunjungan Hari Ini</span>
             <span
-              className={`ml-1 text-xs px-2 py-0.5 rounded-full ${
+              className={`ml-1 text-[11px] px-2 py-0.5 rounded-full ${
                 activeTab === "visits_today"
                   ? "bg-blue-700 text-white"
                   : "bg-slate-200 text-slate-700"
@@ -223,9 +223,9 @@ export function PatientManagement({
               setErrorMsg(null);
               setSuccessMsg(null);
             }}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
               activeTab === "register_visit"
-                ? "bg-blue-600 text-white shadow-xs font-semibold"
+                ? "bg-blue-600 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             }`}
           >
@@ -239,9 +239,9 @@ export function PatientManagement({
               setErrorMsg(null);
               setSuccessMsg(null);
             }}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
               activeTab === "patient_list"
-                ? "bg-blue-600 text-white shadow-xs font-semibold"
+                ? "bg-blue-600 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             }`}
           >
@@ -255,9 +255,9 @@ export function PatientManagement({
               setErrorMsg(null);
               setSuccessMsg(null);
             }}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
               activeTab === "new_patient"
-                ? "bg-blue-600 text-white shadow-xs font-semibold"
+                ? "bg-blue-600 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             }`}
           >
@@ -286,8 +286,10 @@ export function PatientManagement({
         <Card className="rounded-2xl border-slate-200/80 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-4">
             <div>
-              <CardTitle className="text-lg">Antrean & Kunjungan Rawat Jalan Hari Ini</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base font-bold text-slate-800">
+                Antrean & Kunjungan Rawat Jalan Hari Ini
+              </CardTitle>
+              <CardDescription className="text-xs text-slate-500">
                 Daftar antrean dan jadwal kunjungan pasien klinik hari ini.
               </CardDescription>
             </div>
@@ -544,8 +546,10 @@ export function PatientManagement({
         <Card className="rounded-2xl border-slate-200/80 shadow-xs">
           <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4">
             <div>
-              <CardTitle className="text-lg">Database Rekam Medis Pasien</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base font-bold text-slate-800">
+                Database Rekam Medis Pasien
+              </CardTitle>
+              <CardDescription className="text-xs text-slate-500">
                 Daftar data rekam medis pasien terdaftar di klinik.
               </CardDescription>
             </div>

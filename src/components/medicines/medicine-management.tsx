@@ -531,13 +531,13 @@ export function MedicineManagement({
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5">
         <Card className="rounded-2xl border-slate-200/80 shadow-xs p-4">
           <span className="text-xs font-medium text-slate-500 block">Total Jenis Obat</span>
-          <p className="text-xl font-bold text-slate-900 mt-1">{summary.totalMedicines}</p>
+          <p className="text-2xl font-bold text-slate-900 mt-1">{summary.totalMedicines}</p>
           <span className="text-[11px] text-slate-400 mt-0.5 block">Katalog aktif</span>
         </Card>
 
         <Card className="rounded-2xl border-slate-200/80 shadow-xs p-4">
           <span className="text-xs font-medium text-slate-500 block">Total Stok Fisik</span>
-          <p className="text-xl font-bold text-blue-600 mt-1">
+          <p className="text-2xl font-bold text-blue-600 mt-1">
             {summary.totalStock.toLocaleString("id-ID")}
           </p>
           <span className="text-[11px] text-slate-400 mt-0.5 block">Depo Apotek (APT01)</span>
@@ -545,19 +545,19 @@ export function MedicineManagement({
 
         <Card className="rounded-2xl border-slate-200/80 shadow-xs p-4">
           <span className="text-xs font-medium text-slate-500 block">Stok Kritis / Menipis</span>
-          <p className="text-xl font-bold text-amber-600 mt-1">{summary.lowStockCount}</p>
+          <p className="text-2xl font-bold text-amber-600 mt-1">{summary.lowStockCount}</p>
           <span className="text-[11px] text-amber-700/80 mt-0.5 block">Stok &le; 20 unit</span>
         </Card>
 
         <Card className="rounded-2xl border-slate-200/80 shadow-xs p-4">
           <span className="text-xs font-medium text-slate-500 block">Stok Habis</span>
-          <p className="text-xl font-bold text-rose-600 mt-1">{summary.outOfStockCount}</p>
+          <p className="text-2xl font-bold text-rose-600 mt-1">{summary.outOfStockCount}</p>
           <span className="text-[11px] text-rose-700/80 mt-0.5 block">0 unit tersedia</span>
         </Card>
 
         <Card className="rounded-2xl border-slate-200/80 shadow-xs p-4 col-span-2 md:col-span-1">
           <span className="text-xs font-medium text-slate-500 block">Nilai Aset Modal</span>
-          <p className="text-base font-bold text-slate-800 mt-1.5 truncate">
+          <p className="text-xl sm:text-2xl font-bold text-slate-800 mt-1 truncate">
             {formatCurrency(summary.totalAssetValue)}
           </p>
           <span className="text-[11px] text-slate-400 mt-0.5 block">Estimasi harga modal</span>

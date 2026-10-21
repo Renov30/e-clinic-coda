@@ -100,7 +100,7 @@ Seluruh halaman aplikasi harus memiliki layout dan ritme visual yang konsisten:
      - Tab aktif: `bg-blue-600 text-white shadow-xs font-semibold px-4 py-2 rounded-xl text-xs`.
      - Tab tidak aktif: `text-slate-600 hover:text-slate-900 hover:bg-slate-100 px-4 py-2 rounded-xl text-xs font-semibold`.
      - Atau link tab bergaris bawah (`border-b-2 border-blue-600 text-blue-600`).
-   - Tombol aksi utama (misal `+ Tambah ...`, `Buka ...`) diletakkan di sebelah kanan dengan tinggi `h-10` dan `rounded-xl`.
+   - Tombol aksi utama (misal `+ Tambah ...`, `Buka ...`) diletakkan di sebelah kanan dengan tinggi `h-10` dan `rounded-xl text-xs font-semibold`.
 
 3. **Banner Notifikasi / Alert**:
    - Notifikasi sukses: `bg-emerald-50 border-emerald-200 text-emerald-800 rounded-xl p-3.5 border text-xs sm:text-sm font-medium`.
@@ -132,7 +132,53 @@ Seluruh halaman aplikasi harus memiliki layout dan ritme visual yang konsisten:
 
 ---
 
-## 4. Batasan & Larangan Keras (Strict Constraints)
+## 4. Standar Tipografi & Skala Ukuran Font Seragam
+
+Untuk memastikan antarmuka tidak berantakan dan memiliki konsistensi visual di seluruh halaman, seluruh pengembang/agen **wajib mematuhi skala tipografi baku** berikut:
+
+### A. Font Family
+- **Font Utama UI (`font-sans`)**: Digunakan untuk seluruh elemen teks aplikasi (label, tombol, judul, paragraf, input).
+- **Font Monospace (`font-mono`)**: Khusus digunakan untuk nomor registrasi/rekam medis (`no_rkm_medis`), kode barang/obat (`kode_brng`), nota penjualan (`nota_jual`), jam/waktu (`HH:mm`), dan nominal angka uang Rupiah.
+
+### B. Matriks Skala Ukuran Font & Styling Baku
+
+| Elemen UI | Class Tailwind Baku | Warna / Styling Standar | Keterangan & Penggunaan |
+| :--- | :--- | :--- | :--- |
+| **Navbar Page Title** | `text-2xl font-bold tracking-tight` | `text-slate-800` | Judul aktif di Navbar Header kiri |
+| **Card / Section Title** | `text-base font-bold` | `text-slate-800` / `text-slate-900` | Judul Card utama, Dialog Title |
+| **Card / Section Subtitle** | `text-xs font-normal` | `text-slate-500` | Deskripsi card atau modal |
+| **KPI Metric Value** | `text-2xl font-bold` | `text-slate-900` / `text-blue-600` | Angka metrik statistik KPI |
+| **KPI Metric Label** | `text-xs font-medium` | `text-slate-500` | Label nama metrik di atas angka |
+| **KPI Metric Footnote** | `text-[11px] font-normal` | `text-slate-400` | Keterangan kecil di bawah angka |
+| **Tab / Sub-Nav Buttons** | `text-xs font-semibold` | Aktif: `text-white bg-blue-600`, Non-aktif: `text-slate-600` | Pilihan tab di top bar |
+| **Primary Action Button** | `text-xs font-semibold` | `text-white bg-blue-600 h-10 px-4 rounded-xl` | Tombol `+ Tambah ...`, `Simpan` |
+| **Secondary Button** | `text-xs font-semibold` | `bg-white text-slate-700 border border-slate-200 h-10 px-4 rounded-xl` | Tombol batal atau navigasi luar |
+| **Table Action Pills** | `text-xs font-semibold` | `px-2.5 py-1 rounded-lg border shadow-2xs` | Tombol aksi per baris tabel |
+| **Table Header (`<th>`)** | `text-xs font-semibold uppercase tracking-wider` | `text-slate-500 bg-slate-50/80` | Header setiap kolom tabel data |
+| **Table Row Title (Nama)**| `text-sm font-semibold` | `text-slate-800` | Nama Pasien, Nama Obat, Pengguna |
+| **Table Row Meta / Sub** | `text-xs font-normal` | `text-slate-500` | Kategori, Spesialis, Alamat |
+| **Table Code / ID / Waktu**| `text-xs font-mono font-medium` | `text-slate-600` / `text-blue-600 font-bold` | No. RM, Kode Obat, Waktu Reg |
+| **Table Currency (Harga)** | `text-xs font-mono font-bold` | `text-slate-800` / `text-blue-600` | Nilai Rupiah di tabel |
+| **Status Badge / Pill** | `text-xs font-semibold` | `px-2.5 py-0.5 rounded-full border` | Status: Aktif, Nonaktif, Selesai |
+| **Form Input Label** | `text-xs font-semibold` | `text-slate-700 block mb-1` | Label field formulir |
+| **Form Input / Select Text**| `text-xs font-normal` | `text-slate-800 bg-white h-9 rounded-xl` | Teks di dalam input formulir |
+| **Form Helper / Error** | `text-xs font-medium` | Error: `text-rose-500`, Helper: `text-slate-400` | Pesan validasi di bawah input |
+
+### C. Larangan Ketat Tipografi
+1. **Dilarang Menggunakan Ukuran Font Beragam untuk Komponen Serupa**:
+   - Dilarang membuat tab dengan `text-sm` di satu halaman dan `text-xs` di halaman lain. Seluruh tab wajib `text-xs font-semibold`.
+   - Dilarang membuat angka KPI dengan `text-xl` di satu halaman dan `text-2xl` di halaman lain. Seluruh nilai KPI wajib `text-2xl font-bold`.
+2. **Dilarang Menggunakan Ukuran Lebih Besar dari `text-2xl`**:
+   - Jangan menggunakan `text-3xl` atau `text-4xl` di dalam konten halaman. Hirarki paling tinggi di halaman adalah `text-2xl font-bold` (pada angka KPI) dan `text-base font-bold` (pada judul card).
+3. **Warna Teks Harus Konsisten Sesuai Slate Palette**:
+   - Judul & teks utama: `text-slate-900` atau `text-slate-800`.
+   - Label & teks form: `text-slate-700`.
+   - Deskripsi & teks sekunder: `text-slate-500`.
+   - Keterangan non-kritis: `text-slate-400`.
+
+---
+
+## 5. Batasan & Larangan Keras (Strict Constraints)
 
 1. **JANGAN PERNAH MENJALANKAN `git commit`**:
    - Seluruh perubahan kode harus tetap berada dalam *working tree* (unstaged/uncommitted) agar pengguna dapat memeriksa seluruh diff secara mandiri.

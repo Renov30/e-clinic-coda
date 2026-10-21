@@ -25,14 +25,36 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ### 3. Layout Setiap Halaman Seragam
 - Root container dibungkus `<div className="space-y-6">`.
-- Header toolbar/sub-navigasi di atas: Tabs di kiri, Tombol Aksi Utama di kanan (`h-10 rounded-xl`).
+- Header toolbar/sub-navigasi di atas: Tabs di kiri, Tombol Aksi Utama di kanan (`h-10 rounded-xl text-xs font-semibold`).
 - Banner notifikasi: rounded alert ber-border dengan tombol tutup.
 - KPI cards: `grid grid-cols-2 md:grid-cols-4 (atau 5) gap-3.5` dengan card `rounded-2xl border-slate-200/80 shadow-xs bg-white p-4`.
 - Toolbar filter & search: `bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-xs`.
 - Tabel: `bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden`.
 - Tombol aksi tabel: Wajib menggunakan *tactile pill buttons* ber-border (`px-2.5 py-1 rounded-lg text-xs font-semibold`).
 
-### 4. Larangan Keras (Strict Constraints)
+### 4. Standar Tipografi & Skala Ukuran Font Seragam (Wajib Konsisten)
+- **Navbar Page Title**: `text-2xl font-bold tracking-tight text-slate-800`
+- **Card / Section Title**: `text-base font-bold text-slate-800` (atau `text-slate-900`)
+- **Card / Section Subtitle**: `text-xs font-normal text-slate-500`
+- **KPI Metric Value (Angka Besar)**: `text-2xl font-bold text-slate-900` (atau warna status)
+- **KPI Metric Label**: `text-xs font-medium text-slate-500`
+- **KPI Metric Footnote**: `text-[11px] font-normal text-slate-400`
+- **Tab / Sub-Nav Buttons**: `text-xs font-semibold` (dilarang menggunakan `text-sm` di tab)
+- **Primary / Action Buttons**: `text-xs font-semibold`
+- **Table Action Pills**: `text-xs font-semibold`
+- **Table Header (`<th>`)**: `text-xs font-semibold uppercase tracking-wider text-slate-500`
+- **Table Row Title (Nama Pasien / Obat)**: `text-sm font-semibold text-slate-800`
+- **Table Row Meta / Subtitle**: `text-xs font-normal text-slate-500`
+- **Table Code / ID / Waktu / Jam**: `text-xs font-mono font-medium text-slate-600` (atau `text-blue-600 font-bold`)
+- **Table Currency (Harga Nominal)**: `text-xs font-mono font-bold text-slate-800`
+- **Status Badge / Pill**: `text-xs font-semibold`
+- **Form Input Label**: `text-xs font-semibold text-slate-700 block mb-1`
+- **Form Input Text**: `text-xs font-normal text-slate-800 h-9 rounded-xl`
+- **Form Error Text**: `text-xs font-medium text-rose-500`
+- **Modal Dialog Title**: `text-base font-bold text-slate-900`
+- **Modal Dialog Description**: `text-xs font-normal text-slate-500`
+
+### 5. Larangan Keras (Strict Constraints)
 - **JANGAN PERNAH `git commit`**: Biarkan semua perubahan di working tree untuk ditinjau pengguna.
 - **JANGAN BUILD DOCKER**: Aplikasi berjalan lokal dengan `npm run dev`. Docker hanya untuk database MySQL.
 - **MINIMALKAN PENGGUNAAN IKON**: Jangan gunakan ikon dekoratif berlebihan; utamakan tipografi bersih dan tombol pill tegas.

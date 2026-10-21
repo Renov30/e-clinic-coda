@@ -243,16 +243,16 @@ export function PharmacyPos({
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setActiveTab("pos")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
               activeTab === "pos"
-                ? "bg-blue-600 text-white shadow-xs font-semibold"
+                ? "bg-blue-600 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             }`}
           >
             <ShoppingCart className="h-4 w-4" />
             <span>Kasir Penjualan Obat Bebas</span>
             {cart.length > 0 && (
-              <span className="ml-1 text-xs px-2 py-0.5 rounded-full bg-amber-400 text-slate-900 font-bold">
+              <span className="ml-1 text-[11px] px-2 py-0.5 rounded-full bg-amber-400 text-slate-900 font-bold">
                 {cart.length}
               </span>
             )}
@@ -260,15 +260,15 @@ export function PharmacyPos({
 
           <button
             onClick={() => setActiveTab("history")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
               activeTab === "history"
-                ? "bg-blue-600 text-white shadow-xs font-semibold"
+                ? "bg-blue-600 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             }`}
           >
             <History className="h-4 w-4" />
             <span>Riwayat Penjualan Hari Ini</span>
-            <span className="ml-1 text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-700">
+            <span className="ml-1 text-[11px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-bold">
               {salesHistory.length}
             </span>
           </button>

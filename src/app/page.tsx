@@ -85,7 +85,7 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <Card className="rounded-2xl border-slate-200/80 shadow-xs hover:border-slate-300 transition-all">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-slate-500">
+            <CardTitle className="text-xs font-medium text-slate-500">
               Kunjungan Rawat Jalan
             </CardTitle>
             <div className="h-9 w-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
@@ -102,7 +102,7 @@ export default async function DashboardPage() {
 
         <Card className="rounded-2xl border-slate-200/80 shadow-xs hover:border-slate-300 transition-all">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-slate-500">
+            <CardTitle className="text-xs font-medium text-slate-500">
               Database Pasien (RM)
             </CardTitle>
             <div className="h-9 w-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
@@ -119,7 +119,7 @@ export default async function DashboardPage() {
 
         <Card className="rounded-2xl border-slate-200/80 shadow-xs hover:border-slate-300 transition-all">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-slate-500">
+            <CardTitle className="text-xs font-medium text-slate-500">
               Penjualan Obat Luar
             </CardTitle>
             <div className="h-9 w-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
@@ -136,7 +136,7 @@ export default async function DashboardPage() {
 
         <Card className="rounded-2xl border-slate-200/80 shadow-xs hover:border-slate-300 transition-all">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-slate-500">
+            <CardTitle className="text-xs font-medium text-slate-500">
               Koneksi Server Data
             </CardTitle>
             <div

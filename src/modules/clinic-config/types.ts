@@ -1,5 +1,6 @@
 export interface ClinicConfig {
   namaKlinik: string;
+  namaSistem?: string;
   alamat: string;
   kotaKabupaten: string;
   propinsi: string;
@@ -13,6 +14,7 @@ export interface ClinicConfig {
 
 export interface UpdateClinicConfigDTO {
   namaKlinik: string;
+  namaSistem?: string;
   alamat: string;
   kotaKabupaten?: string;
   propinsi?: string;

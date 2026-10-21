@@ -5,6 +5,12 @@ export const clinicProfileSchema = z.object({
     .string()
     .min(3, "Nama klinik minimal 3 karakter")
     .max(120, "Nama klinik maksimal 120 karakter"),
+  namaSistem: z
+    .string()
+    .min(2, "Nama sistem minimal 2 karakter")
+    .max(50, "Nama sistem maksimal 50 karakter")
+    .optional()
+    .default("simitra"),
   alamat: z
     .string()
     .min(5, "Alamat klinik minimal 5 karakter")

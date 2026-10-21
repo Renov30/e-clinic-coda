@@ -1,5 +1,6 @@
 export interface ClinicProfile {
   namaKlinik: string;
+  namaSistem?: string;
   alamat: string;
   kotaKabupaten: string;
   propinsi: string;
@@ -12,6 +13,7 @@ export interface ClinicProfile {
 
 export const DEFAULT_CLINIC_PROFILE: ClinicProfile = {
   namaKlinik: "Smile360 Dental & Medical Clinic",
+  namaSistem: "simitra",
   alamat: "Jl. Kesehatan Raya No. 108",
   kotaKabupaten: "Jakarta Selatan",
   propinsi: "DKI Jakarta",

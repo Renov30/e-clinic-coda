@@ -23,6 +23,7 @@ import { UserSessionPayload } from "@/lib/auth/session";
 import { isRouteAllowed } from "@/lib/auth/permissions";
 
 interface SidebarProps {
+  appName?: string;
   clinicName?: string;
   initialCollapsed?: boolean;
   currentUser?: UserSessionPayload | null;
@@ -47,6 +48,7 @@ const BOTTOM_ITEMS = [
 const STORAGE_KEY = "coda_sidebar_collapsed";
 
 export function Sidebar({
+  appName = "simitra",
   clinicName = "Smile360",
   initialCollapsed = false,
   currentUser,
@@ -106,17 +108,17 @@ export function Sidebar({
           collapsed ? "flex-col gap-3 justify-center" : "justify-between"
         )}
       >
-        <Link href="/" className="flex items-center space-x-3 group" title={clinicName}>
+        <Link href="/" className="flex items-center space-x-3 group" title={appName || clinicName}>
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm transition-transform group-hover:scale-105">
             <HeartPulse className="h-6 w-6 stroke-[2.2]" />
           </div>
           {!collapsed && (
-            <div className="flex flex-col">
+            <div className="flex flex-col min-w-0">
               <span className="font-bold text-lg text-slate-900 leading-tight truncate max-w-[130px]">
-                {clinicName}
+                {appName || "simitra"}
               </span>
-              <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">
-                e-clinic-coda
+              <span className="text-[10px] tracking-wider text-slate-400 font-semibold">
+                SIM Klinik CODA
               </span>
             </div>
           )}

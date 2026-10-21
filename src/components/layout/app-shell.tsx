@@ -8,6 +8,7 @@ import { UserSessionPayload } from "@/lib/auth/session";
 
 interface AppShellProps {
   children: React.ReactNode;
+  appName?: string;
   clinicName?: string;
   pageTitle?: string;
   currentUser?: UserSessionPayload | null;
@@ -16,6 +17,7 @@ interface AppShellProps {
 
 export function AppShell({
   children,
+  appName = "simitra",
   clinicName = "Smile360",
   pageTitle,
   currentUser,
@@ -31,6 +33,7 @@ export function AppShell({
     <div className="flex h-screen w-screen overflow-hidden bg-white">
       {/* Left Sidebar */}
       <Sidebar
+        appName={appName}
         clinicName={clinicName}
         initialCollapsed={initialSidebarCollapsed}
         currentUser={currentUser}

@@ -9,18 +9,17 @@ import { StatusBadge } from "@/components/common/status-badge";
 import { clinicConfigService } from "@/modules/clinic-config/service";
 import { patientRegistrationService } from "@/modules/patient-registration/service";
 import { pharmacyService } from "@/modules/pharmacy/service";
-import { checkDatabaseHealth } from "@/lib/db";
 import {
   Users,
   CalendarCheck,
-  Database,
   Clock,
   Building2,
-  CheckCircle2,
-  AlertTriangle,
   Pill,
   UserPlus,
   ShoppingCart,
+  Stethoscope,
+  Activity,
+  ArrowRight,
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 
@@ -38,15 +37,28 @@ export const metadata = {
 // 3. MAIN COMPONENT (DashboardPage)
 // ==========================================
 export default async function DashboardPage() {
-  const [clinicConfig, dbHealth, patients, visitsToday, recentSales] = await Promise.all([
+  const [clinicConfig, masterData, patients, visitsToday, recentSales] = await Promise.all([
     clinicConfigService.getClinicProfile(),
-    checkDatabaseHealth(),
+    patientRegistrationService.getMasterFormData(),
     patientRegistrationService.searchPatients("", 100),
     patientRegistrationService.getVisitsToday(),
     pharmacyService.getRecentSales(10),
   ]);
 
+  const { doctors, poliklinik } = masterData;
   const totalOmsetObat = recentSales.reduce((acc, s) => acc + s.totalBiaya, 0);
+
+  // Group visits today per poliklinik
+  const poliStats = poliklinik.map((p) => {
+    const visitsInPoli = visitsToday.filter((v) => v.kdPoli === p.kdPoli);
+    const waiting = visitsInPoli.filter((v) => v.stts === "Belum").length;
+    return {
+      kdPoli: p.kdPoli,
+      nmPoli: p.nmPoli,
+      total: visitsInPoli.length,
+      waiting,
+    };
+  });
 
   return (
     <div className="space-y-6">
@@ -137,38 +149,16 @@ export default async function DashboardPage() {
         <Card className="rounded-2xl border-slate-200/80 shadow-xs hover:border-slate-300 transition-all">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-slate-500">
-              Koneksi Server Data
+              Dokter & Poliklinik Aktif
             </CardTitle>
-            <div
-              className={`h-9 w-9 rounded-xl flex items-center justify-center ${
-                dbHealth.connected
-                  ? "bg-emerald-50 text-emerald-600"
-                  : "bg-amber-50 text-amber-600"
-              }`}
-            >
-              <Database className="h-5 w-5" />
+            <div className="h-9 w-9 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">
+              <Stethoscope className="h-5 w-5" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center space-x-2">
-              {dbHealth.connected ? (
-                <>
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                  <span className="text-sm font-bold text-emerald-700">
-                    Sistem Terhubung
-                  </span>
-                </>
-              ) : (
-                <>
-                  <AlertTriangle className="h-4 w-4 text-amber-600" />
-                  <span className="text-sm font-bold text-amber-700">
-                    Siap Digunakan
-                  </span>
-                </>
-              )}
-            </div>
-            <p className="text-xs text-slate-500 mt-1 truncate">
-              {dbHealth.connected ? "Layanan data siap dan aktif" : "Mode mandiri aktif"}
+            <div className="text-2xl font-bold text-slate-800">{doctors.length} Dokter</div>
+            <p className="text-xs text-violet-600 mt-1 font-medium">
+              {poliklinik.length} Layanan poli buka
             </p>
           </CardContent>
         </Card>
@@ -232,7 +222,7 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Clinic Identity & Roadmap Card */}
+        {/* Clinic Identity & Clinical Services Card */}
         <div className="space-y-6">
           <Card className="rounded-2xl border-slate-200/80 shadow-xs">
             <CardHeader className="pb-3">
@@ -278,33 +268,61 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-2xl border-slate-200/80 shadow-xs bg-slate-50/50">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold text-slate-800">
-                Status Modul Aplikasi
-              </CardTitle>
+          {/* Status Antrean Poliklinik Pelayanan */}
+          <Card className="rounded-2xl border-slate-200/80 shadow-xs bg-white">
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+              <div>
+                <CardTitle className="text-base font-bold text-slate-800 flex items-center space-x-2">
+                  <Activity className="h-4 w-4 text-blue-600" />
+                  <span>Layanan & Antrean Poli</span>
+                </CardTitle>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Kesiapan poliklinik rawat jalan
+                </p>
+              </div>
             </CardHeader>
-            <CardContent className="space-y-2 text-xs">
-              <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200">
-                <span className="font-medium text-slate-800">1. Dashboard Klinik</span>
-                <span className="text-emerald-600 font-semibold flex items-center space-x-1">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  <span>Selesai</span>
-                </span>
-              </div>
-              <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200">
-                <span className="font-medium text-slate-800">2. Registrasi Pasien & Kunjungan</span>
-                <span className="text-emerald-600 font-semibold flex items-center space-x-1">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  <span>Selesai</span>
-                </span>
-              </div>
-              <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200">
-                <span className="font-medium text-slate-800">3. Penjualan Obat Luar</span>
-                <span className="text-emerald-600 font-semibold flex items-center space-x-1">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  <span>Selesai</span>
-                </span>
+            <CardContent className="space-y-2.5 pt-2">
+              {poliStats.length === 0 ? (
+                <p className="text-xs text-slate-400 text-center py-4">Belum ada poliklinik aktif.</p>
+              ) : (
+                poliStats.map((poli) => (
+                  <div
+                    key={poli.kdPoli}
+                    className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50/70 border border-slate-200/70 hover:bg-slate-50 transition-colors"
+                  >
+                    <div>
+                      <span className="text-xs font-semibold text-slate-800 block">
+                        {poli.nmPoli}
+                      </span>
+                      <span className="text-[11px] text-slate-500">
+                        Total {poli.total} terdaftar hari ini
+                      </span>
+                    </div>
+                    <div>
+                      {poli.waiting > 0 ? (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/80 font-mono">
+                          {poli.waiting} Menunggu
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+                          Siap Melayani
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+              <div className="pt-1.5">
+                <Link href="/patients">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full text-xs font-semibold text-blue-600 hover:text-blue-700 hover:bg-blue-50 flex items-center justify-center space-x-1 h-8 rounded-lg"
+                  >
+                    <span>Kelola Antrean Pasien</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>

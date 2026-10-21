@@ -32,6 +32,7 @@ export function ClinicProfileForm({ initialConfig }: ClinicProfileFormProps) {
     resolver: zodResolver(clinicProfileSchema),
     defaultValues: {
       namaKlinik: initialConfig.namaKlinik || "",
+      namaSistem: initialConfig.namaSistem || "simitra",
       alamat: initialConfig.alamat || "",
       kotaKabupaten: initialConfig.kotaKabupaten || "",
       propinsi: initialConfig.propinsi || "",
@@ -92,19 +93,42 @@ export function ClinicProfileForm({ initialConfig }: ClinicProfileFormProps) {
 
           {/* Form fields */}
           <div className="space-y-4">
-            <div>
-              <label className="text-xs font-semibold text-slate-700 block mb-1.5">
-                Nama Klinik / Instansi <span className="text-rose-500">*</span>
-              </label>
-              <Input
-                {...register("namaKlinik")}
-                placeholder="cth. Smile360 Dental & Medical Clinic"
-              />
-              {errors.namaKlinik && (
-                <p className="text-xs text-rose-500 mt-1 font-medium">
-                  {errors.namaKlinik.message}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-slate-700 block mb-1.5">
+                  Nama Sistem (Sidebar Header) <span className="text-rose-500">*</span>
+                </label>
+                <Input
+                  {...register("namaSistem")}
+                  placeholder="cth. simitra"
+                />
+                <p className="text-[11px] text-slate-400 mt-1">
+                  Nama branding ringkas yang tampil pada sidebar menu (cth: simitra)
                 </p>
-              )}
+                {errors.namaSistem && (
+                  <p className="text-xs text-rose-500 mt-1 font-medium">
+                    {errors.namaSistem.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-slate-700 block mb-1.5">
+                  Nama Klinik / Instansi Lengkap <span className="text-rose-500">*</span>
+                </label>
+                <Input
+                  {...register("namaKlinik")}
+                  placeholder="cth. Klinik Mitra Keluarga Papua"
+                />
+                <p className="text-[11px] text-slate-400 mt-1">
+                  Digunakan untuk kuitansi, rekam medis, dan surat resmi
+                </p>
+                {errors.namaKlinik && (
+                  <p className="text-xs text-rose-500 mt-1 font-medium">
+                    {errors.namaKlinik.message}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div>

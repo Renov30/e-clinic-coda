@@ -29,6 +29,7 @@ export default async function RootLayout({
     <html lang="id" className="h-full">
       <body className="h-full bg-[#f1f3f6] text-slate-900 antialiased font-sans">
         <AppShell
+          appName={clinicConfig.namaSistem || "simitra"}
           clinicName={clinicConfig.namaKlinik || "Smile360"}
           currentUser={session}
           initialSidebarCollapsed={isSidebarCollapsed}

@@ -109,7 +109,7 @@ export function MedicineManagement({
     status: "1" as "0" | "1",
   });
 
-  // Dialog State: Sesuaikan Stok
+  // Dialog State: Opname Stok
   const [isAdjustOpen, setIsAdjustOpen] = useState(false);
   const [adjustingMedicine, setAdjustingMedicine] = useState<Medicine | null>(null);
   const [adjustForm, setAdjustForm] = useState({
@@ -484,7 +484,7 @@ export function MedicineManagement({
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
             }`}
           >
-            Riwayat Penyesuaian Stok ({adjustments.length})
+            Riwayat Opname & Mutasi ({adjustments.length})
           </button>
         </div>
 
@@ -706,7 +706,7 @@ export function MedicineManagement({
 
                           <td className="py-3.5 px-5 text-center">
                             <span
-                              className={`inline-block px-2.5 py-1 rounded-full text-xs font-semibold border ${
+                              className={`inline-block px-2.5 py-1 rounded-full text-xs font-semibold font-mono border ${
                                 isOutOfStock
                                   ? "bg-rose-50 text-rose-700 border-rose-200"
                                   : isLowStock
@@ -714,7 +714,7 @@ export function MedicineManagement({
                                   : "bg-emerald-50 text-emerald-700 border-emerald-200"
                               }`}
                             >
-                              {m.stok} {m.namaSatuan}
+                              {m.stok}
                             </span>
                           </td>
 
@@ -737,7 +737,7 @@ export function MedicineManagement({
                                 onClick={() => handleOpenAdjustModal(m)}
                                 className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 transition-colors shadow-2xs"
                               >
-                                Sesuaikan Stok
+                                Opname
                               </button>
 
                               <button
@@ -1174,16 +1174,16 @@ export function MedicineManagement({
         </DialogContent>
       </Dialog>
 
-      {/* 4.4.8 Dialog: Sesuaikan Stok (Stock Adjustment / Opname) */}
+      {/* 4.4.8 Dialog: Opname & Penyesuaian Stok */}
       <Dialog open={isAdjustOpen} onOpenChange={setIsAdjustOpen}>
         <DialogContent className="sm:max-w-md">
           <form onSubmit={handleAdjustSubmit}>
             <DialogHeader>
               <DialogTitle className="text-base font-bold text-slate-900">
-                Penyesuaian Stok Depo Apotek
+                Opname & Penyesuaian Stok Apotek
               </DialogTitle>
               <DialogDescription className="text-xs text-slate-500">
-                Tambah stok masuk, catat pengurangan kerusakan/kedaluwarsa, atau lakukan stok opname fisik.
+                Catat hasil stok opname fisik, penerimaan obat baru, atau pengurangan obat kedaluwarsa/rusak.
               </DialogDescription>
             </DialogHeader>
 
